@@ -1,4 +1,4 @@
-latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 2, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm") {
+latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 2, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper") {
 	
 	stat.min = stat.min(obj)
 	nc = nc(obj)
@@ -24,14 +24,15 @@ latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 2, ta
 	rd <- fm.up(rd)
 	rd <- ft.up(rd)
 	rd <- ll.up(rd)
-	
+		
 	rr <- fq.up(rr)
-	#rd <- fq.up(rd)
-	rr <- ft.up(rr)
+	rr <- ft.up(rr)	
+	rr <- ll.up(rr)
 	
-	
-	tex <- template2("a3paper")
-	tex[[2]] <- longtable(rd, r0, stat.min = stat.min, nc = nc, nc.n = nc.n,
+	if (diagnostic) r <- rd else r <- rr	
+
+	tex <- template2(paper = paper)
+	tex[[2]] <- longtable(r, r0, stat.min = stat.min, nc = nc, nc.n = nc.n,
 		col.width = col.width, what = "cluster")
 	tex <- unlist(tex)
 	con <- file(file)

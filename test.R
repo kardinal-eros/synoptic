@@ -1,16 +1,16 @@
-source('~/Desktop/latex2/testdata.R')
+#	source('~/Documents/synoptic/testdata.R') calls: rm(list = ls()[-grep("X", ls())])
 
-source('~/Desktop/latex2/partitions.R')
-source('~/Desktop/latex2/layernumber.R')
+source('~/Documents/synoptic/partitions.R')
+source('~/Documents/synoptic/layernumber.R')
 
-source('~/Desktop/latex2/synoptic-methods.R')
-source('~/Desktop/latex2/synoptic.R')
+source('~/Documents/synoptic/synoptic-methods.R')
+source('~/Documents/synoptic/synoptic.R')
 
-source('~/Desktop/latex2/extract.R')
-source('~/Desktop/latex2/order.R')
-source('~/Desktop/latex2/longtable.R')
+source('~/Documents/synoptic/extract.R')
+source('~/Documents/synoptic/order.R')
+source('~/Documents/synoptic/longtable.R')
 
-source('~/Desktop/latex2/latex2-methods.R')
-source('~/Desktop/latex2/latex2.R')
+source('~/Documents/synoptic/latex2-methods.R')
+source('~/Documents/synoptic/latex2.R')
 
-latex2(synoptic(X))
+#	latex2(synoptic(X))
