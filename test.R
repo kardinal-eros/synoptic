@@ -13,4 +13,5 @@ source('~/Documents/synoptic/longtable.R')
 source('~/Documents/synoptic/latex2-methods.R')
 source('~/Documents/synoptic/latex2.R')
 
+#	package.skeleton("synoptic", list = ls())
 #	latex2(synoptic(X))
