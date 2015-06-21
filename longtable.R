@@ -1,3 +1,13 @@
+#	\makeatletter
+#	\def\dynscriptsize{\check@mathfonts\fontsize{\sf@size}{\z@}\selectfont}
+#	\makeatother
+#	\def\textunderset#1#2{\leavevmode
+#	  \vtop{\offinterlineskip\halign{%
+#	    \hfil##\hfil\cr\strut#2\cr\noalign{\kern-.3ex}
+#	    \hidewidth\dynscriptsize\strut#1\hidewidth\cr}}}
+    
+#	\textunderset{1-2a}{100}+^{***}_{+44}
+
 glyphs <- function (x) {
 	#	MULTIPLICATION X
 	x <- gsub("\u2715", "$\\times$", x, fixed = TRUE)
