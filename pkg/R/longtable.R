@@ -57,7 +57,7 @@ multicolumn <- function (text = "NULL", format = "c", number = 1, newline = FALS
 	
 begin.longtable <- function (width = 0, columntype = "p", unit = "mm") {
 	r <- vector("character", length(columntype))
-	for (i in seq_along(columntype)) {
+	for (i in seq_along(columntype)){
 		if (columntype[ i ] == "p")
 			r[ i ] <- paste0(columntype[ i ], "{", width[ i ], unit, "}")
 		if (columntype[ i ] == "d")

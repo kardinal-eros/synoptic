@@ -1,0 +1,5 @@
+importFrom("vegsoup", splitAbbr, layers, partitioning, getK, contingency, constancy)
+
+exportPattern("^[[:alpha:]]+")
+
+S3method(print, synoptic)

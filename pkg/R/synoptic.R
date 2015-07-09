@@ -15,7 +15,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 	fq <- colSums(obj)     # species frequency
 	
 	nc <- getK(obj)        ### number of clusters
-	nc.n <- partitions(obj) ### number of samples per cluster
+	nc.n <- partitions(obj) ### number of sites per cluster
 	n  <- nrow(obj)        # number of sites
 	sp <- ncol(obj)        # number of species
 	
@@ -48,9 +48,9 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 			ft.c = NA,               # index to cluster with sig. fisher test
 			ff   = FALSE,            # fidelity measure above treshold but at least 1 sig. fisher test
 			
-			stat.min = stat.min,
-			p.max = p.max,
-			nc.n = nc.n
+			nc.n = nc.n,             # number of sites per cluster			
+			stat.min = stat.min,     # value of stat.min as defined in call
+			p.max = p.max            # value of p.max as defined in call
 			)
 		}, simplify = FALSE)
 	names(r) <- rownames(cs)
@@ -80,7 +80,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 	return(r)
 }
 
-print.synoptic <- function (obj) {
-	cat("object of class: ", class(obj),"\n")
-	print(head(cs(obj)))
+print.synoptic <- function (x, ...) {
+	cat("object of class: ", class(x),"\n")
+	print(head(cs(x)))
 } 

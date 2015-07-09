@@ -1,4 +1,4 @@
-###	section of indexing fucntions
+###	section of indexing functions
 #	as ft.s but logical matrix with TRUE for sig.
 ft.s.ij   <- function (x) {
 	r <- ft.s(x)

@@ -28,10 +28,10 @@ nc     <- function (x) length(x[[1]]$ct)
 # number of samples per cluster
 nc.n <- function (x) .nc.n(x[[1]])
 
-# number of samples per cluster
+# applied threshold value for fidelity statistic
 stat.min <- function (x) .stat.min(x[[1]])
 
-# number of samples per cluster
+# applied threshold value for fisher test
 p.max <- function (x) .p.max(x[[1]])
 	
 #	numeric matrix of fidelity values

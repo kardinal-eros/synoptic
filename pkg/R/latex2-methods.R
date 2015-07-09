@@ -22,9 +22,6 @@ cs.tex.d <- function (x, align = "+") {
 	r 
 }
 #	latex utility function to warp fisher test sig. symbols in math superscript
-#	round: rounding of fidelity values
-#	ns: if TRUE give fidelity values for non sig. fidelity values,
-#	but only for those species that achieve a given constancy treshold
 fm.tex <- function (x, round = 2, ns = TRUE, treshold = 50, sign = TRUE) {
 	ij <- ft.s.ij(x)
 	r <- r1 <- r2 <- tb.0(x)
