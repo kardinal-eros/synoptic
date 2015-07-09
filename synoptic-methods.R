@@ -73,5 +73,8 @@ ft.n   <- function (x) as.vector(sapply(x, .ft.n))
 #	list of numeric index vectors to clusters for which fisher test is sig.
 ft.c   <- function (x) sapply(x, .ft.c, simplify = FALSE)
 
-#	logical if fidelity measure above treshold but at least 1 sig. fisher test
+#	logical, if fidelity measure above treshold but at least 1 sig. fisher test
 ff     <- function (x) sapply(x, .ff)
+
+#	logical, if at least one species has sig. fisher test
+ft.any <- function (x) any(as.vector(ft.s(x)) != "")

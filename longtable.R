@@ -100,17 +100,20 @@ list2tex <- function (x, seperate = TRUE, what = "cluster") {
 
 	if (seperate) {
 		if (what == "layer") n <- rle(ll.o(x))
-		if (what == "cluster") n <- rle(ft.nc.c(x))
-		i1 <- cumsum(n$lengths)[ -length(n$values) ] # omit last
-		i2 <- sort(c(i1, 1:length(x)))
-		r <- r[i2]	
-		r[ i1 + (1:length(i1)) ] <- "\\tabularnewline"
+		if (what == "cluster" & ft.any(x)) {
+			n <- rle(ft.nc.c(x))
+			i1 <- cumsum(n$lengths)[ -length(n$values) ] # omit last
+			i2 <- sort(c(i1, 1:length(x)))
+			r <- r[i2]	
+			r[ i1 + (1:length(i1)) ] <- "\\tabularnewline"
+		}	
 	}
 	return(r)
 }
 
 #	convert list into species list and warp into tex multicols environment 
 footer <- function (x, columns = 2) {
+	if (length(x) > 0) {
 	r <- tb.0(x)
 	r[] <- rep(1:ncol(r), each = nrow(r))
 	r[] <- paste(r, ct(x), sep = ":")
@@ -122,7 +125,10 @@ footer <- function (x, columns = 2) {
 	r <- paste(apply(r, 1, paste, collapse = " "), collapse = ", ")
 	r <- gsub("  ", " ", r, fixed = TRUE)
 
-	r <- paste(r, collapse = ";")	
+	r <- paste(r, collapse = ";")
+	} else {
+		r <- "Empty"
+	}	
 	r <- c(paste0("\\begin{multicols}{", columns, "}"),
 		"\\footnotesize{",
 		r,

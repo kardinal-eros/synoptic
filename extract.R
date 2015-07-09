@@ -26,11 +26,15 @@ ft.c2 <- function (x) {
 	return(r)
 }
 #	character vector with strings identifing species by cluster groups
-ft.nc.c <- function (x, collapse = " + ") {
-	x1 <- x[ ft.t(x) ]
-	x0 <- x[ !ft.t(x) ] # do nothing
-	r <- ft.c(x1)[ft.t(x1)] # ft.c is NA if not within p.max
-	r <- sapply(r, paste, collapse = collapse)
+ft.nc.c <- function (x, collapse = " + ") {		
+		x1 <- x[  ft.t(x) ] # empty if no sig. species
+		x0 <- x[ !ft.t(x) ] # do nothing
+		if (ft.any(x)) {
+			r <- ft.c(x1)[ ft.t(x1) ] # ft.c is NA if not within p.max
+			r <- sapply(r, paste, collapse = collapse)
+		} else {
+			stop("can't find cluster groups, ft.any returns FALSE")
+		}
 	return(r)
 }
 #	matrix of constancies and fisher test
