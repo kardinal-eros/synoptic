@@ -1,4 +1,4 @@
-importFrom("vegsoup", splitAbbr, layers, partitioning, getK, contingency, constancy)
+importFrom("vegsoup", splitAbbr, layers, partitioning, getK, contingency, constancy, colSums)
 
 exportPattern("^[[:alpha:]]+")
 
