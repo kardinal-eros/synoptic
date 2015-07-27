@@ -162,7 +162,13 @@ longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10,
 			"\\tabularnewline",
 			"\\midrule",
 			"\\endhead",
+			"\\midrule"
+		),
+		NULL, # table foot (\multicolumn{})
+		c(
+			"\\tabularnewline",		
 			"\\midrule",
+			"\\tabularnewline",	
 			"\\endfoot"
 		),
 		NULL, # table body
@@ -181,16 +187,19 @@ longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10,
 		multicolumn, format = "c"), collapse = "&")
 	head2 <- paste(sapply(c("", "Relevees", paste0("\\textit{", nc.n, "}")),
 		multicolumn, format = "c"), collapse = "&")
-	
+	foot <- paste(sapply(c("", "", paste0("\\textbf{", 1:nc, "}")),
+		multicolumn, format = "c"), collapse = "&")
+			
 	head <- c(head1, "\\tabularnewline", head2)
 #	r[[ 2 ]] <- begin.longtable(c(taxa.width, layer.width, rep(col.width, nc)), columntype = columntype)
 	r[[ 2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, nc)),
 								columntype = c("p", "c", rep("d", nc)) )
-	r[[ 3 ]] <- caption(stat.min, nc.n)
-	r[[ 5 ]] <- head
-	r[[ 7 ]] <- head
-	r[[ 9 ]] <- list2tex(x, seperate = seperate, what = what)
-	r[[13 ]] <- footer(y, columns = columns)
+	r[[  3 ]] <- caption(stat.min, nc.n)
+	r[[  5 ]] <- head
+	r[[  7 ]] <- head
+	r[[  9 ]] <- foot
+	r[[ 11 ]] <- list2tex(x, seperate = seperate, what = what)
+	r[[ 15 ]] <- footer(y, columns = columns)
 	
 	return(unlist(r))
 }
