@@ -25,6 +25,7 @@ template2 <- function (paper = "a4paper", color = "lightgray") {
 		c(
 			"\\documentclass[9pt]{article}",
 			paste0("\\usepackage[", paper, "]{geometry}"),
+			"\\usepackage[T1]{fontenc}"
 			"\\usepackage[english]{babel}",
 			"\\usepackage{array, dcolumn, booktabs, longtable}",
 			"\\usepackage{multicol}",
