@@ -24,22 +24,28 @@
 Get components of synoptic objects.
 }
 \description{
-A set of simple accessor functions to obtain components, summaries or indices of \verb{synoptic} objects. The function names are as short as possible. Reoccuring acronyms include the following: \emph{ft} stands for Fischer Test and \emph{fm} for fidelity measure.
+A set of simple accessor functions to obtain components, summary tables or index-like vectors and matrices of \verb{synoptic} objects. The function names are held as short as possible, reoccuring acronyms include the following: \emph{ft} stands for Fisher test and \emph{fm} for fidelity measure.
 }
 \usage{
 nc(x)
 nc.n(x)
+
 stat.min(x)
 p.max(x)
+
 fm(x)
 fm.m(x)
+
 cs(x)
 ct(x)
 fq(x)
+
 ll(x)
 ll.o(x)
 tt(x)
+
 d(x)
+
 ft.t(x)
 ft.s(x)
 ft.n(x)
@@ -57,74 +63,77 @@ ft.any(x)
 
 \details{
 
- The following methods are defined for \verb{synoptic} objects.
+ The methods have the following meaning for \verb{synoptic} objects.
  
 
  \describe{
   \item{ \code{nc} }{
-    number of clusters
+    returns number of clusters
   }
   \item{ \code{nc.n} }{
-    number of samples per cluster
+    returns number of samples per cluster
   }
   \item{ \code{stat.min} }{
-    applied threshold value for fidelity statistic
+    reports the applied threshold value for fidelity statistic
   }
   \item{ \code{p.max} }{
-    applied threshold value for Fisher test
+    reports the applied threshold value for Fisher test
   }
   \item{ \code{fm} }{
-    fidelity values
+    obtains fidelity values
   }
   \item{ \code{fm.m} }{
-    cluster for with highest fidelity
+    returns the cluster with highest fidelity value
   }
   \item{ \code{cs} }{
-    constancy table
+    returns a constancy table
   }
   \item{ \code{ct} }{
-    contingency table
+    returns a contingency table
   }
   \item{ \code{fq} }{
-    species frequencies
+    obtains species frequencies
   }
   \item{ \code{ll} }{
-    layer assignments
+    returns layer assignments
   }
   \item{ \code{ll.o} }{
-    layer assignments as ordered integer (see
+    returns layer assignments as ordered integer (see
     \code{\link[vegsoup:layernumber]{layernumber}})
   }
   \item{ \code{tt} }{
-    scientific species name
+    returns scientific species name
   }
   \item{ \code{d} }{
-     \verb{TRUE} for diagnostic species
+     returns \verb{TRUE} for diagnostic species
   }
   \item{ \code{ft.t} }{
-    Fisher test is within threshold \verb{p.max}
+    reports if Fisher test is within threshold \verb{p.max}
   }
   \item{ \code{ft.s} }{
-    Fischer test significance symbols
+    returns Fisher test significance symbols
   }
   \item{ \code{ft.n} }{
-    number of clusters with significant Fisher test (see \verb{p.max})
+    reports the number of clusters with significant Fisher test (see \verb{p.max})
   }
   \item{ \code{ft.c} }{
-    clusters for which Fisher test is significant
+    returns the clusters for which a Fisher test is significant
   }
   \item{ \code{ff} }{
-    fidelity measure above treshold \verb{stat.min} and at least one
-    significant Fisher test (\verb{p.max})
+    reports if fidelity measure is above treshold \verb{stat.min} and at least
+    one Fisher test is significant (\verb{p.max})
   }
   \item{ \code{ft.any} }{
-    at least one species is significant for a Fisher test (\verb{p.max})
+    reports if at least one species is significant for a Fisher test (\verb{p.max})
   }
  }
 
 }
 
 \value{
+
+The functions are grouped by their returned class and/or mode.
+
  \describe{
 
   \item{ functions
@@ -137,14 +146,16 @@ ft.any(x)
     \code{ll.o},
     \code{ft.n}
   }{
-    return \verb{numeric} vectors
+    return \verb{numeric} vectors. \code{stat.min} and \code{p.max} return
+    vectors of length 1, the remaining functions vectors of length \code{length(x)},
+    the number of species and species layer replicates, respectively.
   }
 
   \item{
     \code{ll},
     \code{tt}
   }{
-    returns a \verb{character} vector
+    return a \verb{character} vector.
   }
 
   \item{
@@ -152,7 +163,7 @@ ft.any(x)
     \code{ff},
     \code{ft.any}
   }{
-    return \verb{logical} vectors
+    return \verb{logical} vectors.
   }
 
   \item{
@@ -160,7 +171,8 @@ ft.any(x)
     \code{cs},
     \code{ct}
   }{
-    return a \verb{matrix} of mode \verb{numeric}
+    return a \verb{matrix} of mode \verb{numeric} with as many columns as there
+    are clusters (\code{nc(x)}).
   }
 
   \item{
@@ -187,11 +199,13 @@ ft.any(x)
 Roland Kaiser
 }
 \examples{
-library(vegsoup)
 # a dummy example using simulated data
+library(vegsoup)
 xx <- fidelity(VegsoupPartition(coenoflex(), k = 3))
+x <- synoptic(xx)
 
-x <- synoptic(xx, stat.min = 0.2, p.max = 0.05)
+# show object
+x
 
 # number of clusters
 nc(x)
@@ -221,7 +235,7 @@ tt(x)
 d(x)
 # Fisher test is within threshold
 ft.t(x)
-# Fischer test significance symbols
+# Fisher test significance symbols
 ft.s(x)
 # number of clusters with significant Fisher test
 ft.n(x)
