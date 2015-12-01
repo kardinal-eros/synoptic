@@ -15,9 +15,7 @@ LazyData: yes
 Collate: extract.R
          latex2-methods.R
          latex2.R
-         layernumber.R
          longtable.R
          order.R
-         partitions.R
          synoptic-methods.R
          synoptic.R
