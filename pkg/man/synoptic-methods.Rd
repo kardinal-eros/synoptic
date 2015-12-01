@@ -1,3 +1,5 @@
+\encoding{UTF-8}
+
 \name{synoptic-methods}
 
 \alias{nc}
@@ -124,7 +126,8 @@ ft.any(x)
     one Fisher test is significant (\verb{p.max})
   }
   \item{ \code{ft.any} }{
-    reports if at least one species is significant for a Fisher test (\verb{p.max})
+    reports if at least one cluster is significant for a Fisher test
+    and a given species
   }
  }
 
@@ -136,7 +139,7 @@ The functions are grouped by their returned class and/or mode.
 
  \describe{
 
-  \item{ functions
+  \item{
     \code{nc},
     \code{nc.n},
     \code{stat.min},
@@ -147,7 +150,7 @@ The functions are grouped by their returned class and/or mode.
     \code{ft.n}
   }{
     return \verb{numeric} vectors. \code{stat.min} and \code{p.max} return
-    vectors of length 1, the remaining functions vectors of length \code{length(x)},
+    vectors of length 1, the remaining functions vectors of \code{length(x)},
     the number of species and species layer replicates, respectively.
   }
 
