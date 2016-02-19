@@ -2,12 +2,12 @@ Package: synoptic
 Type: Package
 Title: Synoptic Tables for Vegsoup Objects
 Version: 0.1-2
-Date: 2015-12-01
+Date: 2016-02-19
 Authors@R: c(person("Roland", "Kaiser", role = c("aut", "cre"),
 					 email = "kardinal.eros@gmail.com"))
 Maintainer: Roland Kaiser <kardinal.eros@gmail.com>
 Depends: R (>= 3.0.1), vegsoup
-Description: This packages provides a drop-in replacement for the Latex method in package vegsoup (https://github.com/rforge/vegsoup).
+Description: This packages provides a drop-in replacement for the Latex method in package vegsoup (https://github.com/rforge/vegsoup). Functionality includes treatment of statistical fidelity measures and table sorting options.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyLoad: yes
