@@ -23,7 +23,7 @@ library(devtools)
 #	install dependency vegsoup from github mirror
 install_github("rforge/vegsoup/pkg")
 
-install_github("kardinal-eros/synoptic/pkg")
+install_github("kardinal-eros/synoptic")
 
 library(synoptic)
 ```
