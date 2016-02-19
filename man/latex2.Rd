@@ -8,9 +8,11 @@ Write table to Latex
 A simple interface to write a file that can be typesetted with latex.
 }
 \usage{
-latex2(obj, file = "foo.tex", diagnostic = TRUE, abundance = 1, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE)
-template2(paper = "a4paper", color = "lightgray")
+latex2(obj, file = "foo.tex", diagnostic = TRUE, abundance = 1, taxa.width = 70,
+       layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper",
+       warn = FALSE)
 
+template2(paper = "a4paper", color = "lightgray")
 }
 \arguments{
   \item{obj}{
