@@ -10,6 +10,7 @@
 \alias{fm.m}
 \alias{cs}
 \alias{ct}
+\alias{oc}
 \alias{fq}
 \alias{ll}
 \alias{ll.o}
@@ -21,6 +22,11 @@
 \alias{ft.c}
 \alias{ff}
 \alias{ft.any}
+\alias{q0}
+\alias{q0.25}
+\alias{q0.5}
+\alias{q0.75}
+\alias{q1}
 
 \title{
 Get components of synoptic objects.
@@ -40,6 +46,7 @@ fm.m(x)
 
 cs(x)
 ct(x)
+oc(x)
 fq(x)
 
 ll(x)
@@ -54,6 +61,12 @@ ft.n(x)
 ft.c(x)
 ff(x)
 ft.any(x)
+
+q0(x)
+q0.25(x)
+q0.5(x)
+q0.75(x)
+q1(x)
 }
 
 \arguments{
@@ -93,6 +106,9 @@ ft.any(x)
   \item{ \code{ct} }{
     returns a contingency table
   }
+  \item{ \code{ct} }{
+    returns a logical matrix of species occurrences in clusters
+  }
   \item{ \code{fq} }{
     obtains species frequencies
   }
@@ -128,6 +144,9 @@ ft.any(x)
   \item{ \code{ft.any} }{
     reports if at least one cluster is significant for a Fisher test
     and a given species
+  }
+  \item{ \code{q0}, \code{q0.25}, \code{q0.5}, \code{q0.75}, \code{q1} }{
+    Get abundance quantiles.
   }
  }
 
@@ -179,6 +198,13 @@ The functions are grouped by their returned class and/or mode.
   }
 
   \item{
+    \code{oc}
+  }{
+    return a \verb{matrix} of mode \verb{logical} with as many columns as there
+    are clusters (\code{nc(x)}).
+  }
+
+  \item{
      \code{ft.t}
   }{
     returns a \verb{matrix} of mode \verb{logical}
@@ -226,6 +252,8 @@ fm.m(x)
 cs(x)
 # contingency table
 ct(x)
+# matrix of species occurences
+oc(x)
 # species frequencies
 fq(x)
 # layer assigment

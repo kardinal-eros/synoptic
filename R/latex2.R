@@ -1,6 +1,10 @@
-latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 1, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
-		
-	#	not in a combination beacause ft.c is NA if not within p.max
+latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+	UseMethod("latex2")
+}	
+
+latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+	stopifnot(inherits(obj, "synoptic"))
+	#	not in a combination because ft.c is NA if not within p.max
 	#	is.na(ft.c(rr0)) # use for tex commands 
 	
 	#	rare species
@@ -26,12 +30,38 @@ latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 1, ta
 	rr <- ll.up(rr)
 	
 	if (diagnostic) r <- rd else r <- rr	
-
+	
+	class(r) <- "synoptic"
+	
 	tex <- template2(paper = paper)
 	
 	tex[[2]] <- longtable(r, r0, stat.min = stat.min(obj), nc = nc(obj), nc.n = nc.n(obj),
 		col.width = col.width, what = "cluster")
 		
+	tex <- unlist(tex)
+	con <- file(file)
+		writeLines(glyphs(tex), con)
+	close(con)
+}
+
+latex2.monoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+	if (inherits(obj, "list") | inherits(obj, "monoptic")) {
+		stop("please supply a lost of monoptic objects")
+	}
+	k <- length(obj)
+	
+	r <- vector("list", length = k)
+	for (i in 1:k) {
+		ri <- obj[[ i ]]
+		ri <- fq.up(ii)
+		class(ri) <- "monoptic"
+		r[[ i ]] <- c(paste("% cluster", i), longtable(ri))
+	}
+
+	tex <- template2(paper = paper)
+	
+	tex[[2]] <- unlist(r)
+	
 	tex <- unlist(tex)
 	con <- file(file)
 		writeLines(glyphs(tex), con)

@@ -1,12 +1,13 @@
 \name{synoptic}
 \alias{synoptic}
 \alias{print.synoptic}
+\alias{summary.synoptic}
 
 \title{
 Create synoptic objects.
 }
 \description{
-Create an object of class \code{synoptic} from an \code{\linkS4class{VegsoupPartitionFidelity}} object.
+Create an object of class \code{synoptic} from a \code{\linkS4class{VegsoupPartitionFidelity}} object.
 }
 \usage{
 synoptic(obj, stat.min = 0.4, p.max = 0.05)
@@ -33,6 +34,9 @@ An object of class \verb{synoptic}.
 
 \author{
 Roland Kaiser
+}
+\seealso{
+\code{\link{monoptic}}
 }
 \examples{
 library(vegsoup)

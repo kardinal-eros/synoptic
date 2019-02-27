@@ -78,19 +78,24 @@ caption <- function (stat.min = NULL, nc.n = NULL, sp = NULL) {
 			"Statistics threshold: ",
 			stat.min * 100,
 			". ",
-#			"Total number of relevees: ",
-#			sum(nc.n),
-#			". Number and species: ",
-#			sum(sp),			
-			#	paste(1:length(nc.n), nc.n, sep = ":", collapse = ", "),
+			"Total number of relevees: ",
+			sum(nc.n),
+			". Number and species: ",
+			sum(sp),			
+			paste(1:length(nc.n), nc.n, sep = ":", collapse = ", "),
 			"."
 		), collapse = "")
 	r <- paste0("\\caption{", r, "}", collapse = "")	
 	return(r)			
 }
 
-#	convert list object to tex commands
-list2tex <- function (x, seperate = TRUE, what = "cluster") {
+
+list2tex <- function (x, seperate, what) {
+	UseMethod("list2tex")
+}	
+
+#	convert list object to tex commands for objects of class synoptic
+list2tex.synoptic <- function (x, seperate = TRUE, what = "cluster") {
 
 	stopifnot(is.logical(seperate))	
 	WHAT <- c("layer", "cluster")
@@ -112,33 +117,56 @@ list2tex <- function (x, seperate = TRUE, what = "cluster") {
 	return(r)
 }
 
-#	convert list into species list and warp into tex multicols environment 
-footer <- function (x, columns = 2) {
-	if (length(x) > 0) {
-	r <- tb.0(x)
-	r[] <- rep(1:ncol(r), each = nrow(r))
-	r[] <- paste(r, ct(x), sep = ":")
-	r[ ct(x) == 0 ] <- ""
-	r <- apply(r, 1, function (x) paste(x[ x != "" ], collapse = ","))
-	r <- cbind(tt(x), ll(x), ll.o(x), r)
-	r <- r[order(r[ ,1 ], r[ ,3 ]), -3]
+#	convert list object to tex commands for objects of class monoptic
+list2tex.monoptic <- function (x, seperate, what) {
+	
+	r <- cbind(tt(x), ll(x), c(cs(x)), c(ct(x)),
+		q0(x), q0.25(x), q0.5(x), q0.75(x), q1(x),
+		as.character(factor(d(x), levels = c(TRUE, FALSE), labels = c("diag. species", ""))),
+		round(c(fm(x)), 3))
+	r <- apply(r, 1, function (x) paste(paste(x, collapse = " & "), "\\tabularnewline"))
 
-	r <- paste(apply(r, 1, paste, collapse = " "), collapse = ", ")
-	r <- gsub("  ", " ", r, fixed = TRUE)
-
-	r <- paste(r, collapse = ";")
-	} else {
-		r <- "Empty"
-	}	
-	r <- c(paste0("\\begin{multicols}{", columns, "}"),
-		"\\footnotesize{",
-		r,
-		"}",
-		"\\end{multicols}")
 	return(r)
 }
 
+#	convert list into species list and warp into tex multicols environment 
+footer <- function (x, columns = 2) {
+	if (length(x) > 0) {
+		r <- tb.0(x)
+		r[] <- rep(1:ncol(r), each = nrow(r))
+		r[] <- paste(r, ct(x), sep = ":")
+		r[ ct(x) == 0 ] <- ""
+		r <- apply(r, 1, function (x) paste(x[ x != "" ], collapse = ","))
+		r <- cbind(tt(x), ll(x), ll.o(x), r)
+		r <- r[order(r[ ,1 ], r[ ,3 ]), -3]
+
+		r <- paste(apply(r, 1, paste, collapse = " "), collapse = ", ")
+		r <- gsub("  ", " ", r, fixed = TRUE)
+
+		r <- paste(r, collapse = ";")
+	
+		r <- c(paste0("\\begin{multicols}{", columns, "}"),
+			"\\footnotesize{",
+			r,
+			"}",
+			"\\end{multicols}")
+		} else {
+			r <- "% no footer appended"
+		}	
+		return(r)
+}
+
 longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), seperate = TRUE, what = "layer", columns = 2) {
+	UseMethod("longtable")
+}
+
+longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), seperate = TRUE, what = "layer", columns = 2) {
+	
+	#	append a table footer 
+	if (missing(y)) {
+		y <- NA
+	}
+	
 	r <- list(
 		c(
 			"\\setlongtables"
@@ -192,15 +220,79 @@ longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10,
 		multicolumn, format = "c"), collapse = "&")
 			
 	head <- c(head1, "\\tabularnewline", head2)
-#	r[[ 2 ]] <- begin.longtable(c(taxa.width, layer.width, rep(col.width, nc)), columntype = columntype)
-	r[[ 2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, nc)),
+	r[[  2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, nc)),
 								columntype = c("p", "c", rep("d", nc)) )
 	r[[  3 ]] <- caption(stat.min, nc.n)
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
 	r[[ 11 ]] <- list2tex(x, seperate = seperate, what = what)
-	r[[ 15 ]] <- footer(y, columns = columns)
+	r[[ 15 ]] <- footer(y, columns = columns)	
 	
 	return(unlist(r))
 }
+
+longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm") {
+
+	r <- list(
+		c(
+			"\\setlongtables"
+		),	
+		NULL, # \begin{longtable}
+		NULL, # \caption{}
+		c(
+			"\\label{THELABEL}",
+			"\\tabularnewline",
+			"\\toprule"
+		),
+		NULL, # first head (\multicolumn{})
+		c(
+			"\\tabularnewline",
+			"\\midrule",
+			"\\endfirsthead\\caption[]{\\em (continued)}",
+			"\\tabularnewline",
+			"\\midrule"
+		),
+		NULL, # table header (\multicolumn{})
+		c(
+			"\\tabularnewline",
+			"\\midrule",
+			"\\endhead",
+			"\\midrule"
+		),
+		NULL, # table foot (\multicolumn{})
+		c(
+			"\\tabularnewline",		
+			"\\midrule",
+			"\\tabularnewline",	
+			"\\endfoot"
+		),
+		NULL, # table body
+		c(
+			"\\tabularnewline"
+		),		
+		NULL, # table body
+		c(
+			"\\bottomrule",
+			"\\end{longtable}"
+		),
+		NULL # table footer
+		)
+
+	head <- paste(sapply(c("Taxon", "Layer", "Constancy", "Contingency",
+		"Min", "Lower", "Median", "Upper", "Max", "Typical", "Statistic"),
+		multicolumn, format = "c"), collapse = "&")
+	foot <- head
+	
+	r[[  2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 7), 30, 3.2),
+								columntype = c("p", "c", rep("d", 7), "c", "d") )
+	r[[  3 ]] <- caption(stat.min)
+	r[[  5 ]] <- head
+	r[[  7 ]] <- head
+	r[[  9 ]] <- foot
+	r[[ 11 ]] <- list2tex(ri)
+	r[[ 15 ]] <- footer(NULL)
+	
+	return(unlist(r))
+
+}	
