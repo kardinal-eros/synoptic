@@ -45,15 +45,15 @@ latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundanc
 }
 
 latex2.monoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
-	if (inherits(obj, "list") | inherits(obj, "monoptic")) {
-		stop("please supply a lost of monoptic objects")
+	if (!inherits(obj, "list") & !inherits(obj, "monoptic")) {
+		stop("please supply a list of monoptic objects")
 	}
 	k <- length(obj)
 	
 	r <- vector("list", length = k)
 	for (i in 1:k) {
 		ri <- obj[[ i ]]
-		ri <- fq.up(ii)
+		ri <- fq.up(ri)
 		class(ri) <- "monoptic"
 		r[[ i ]] <- c(paste("% cluster", i), longtable(ri))
 	}

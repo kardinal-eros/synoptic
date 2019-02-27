@@ -290,7 +290,7 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
-	r[[ 11 ]] <- list2tex(ri)
+	r[[ 11 ]] <- list2tex(x)
 	r[[ 15 ]] <- footer(NULL)
 	
 	return(unlist(r))

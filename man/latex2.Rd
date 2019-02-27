@@ -75,6 +75,11 @@ x <- synoptic(fidelity(VegsoupPartition(coenoflex(), k = 3)))
 # generate LaTex file
 latex2(x, file = tempfile())
 
+x <- monoptic(fidelity(VegsoupPartition(coenoflex(), k = 3)))
+
+# generate LaTex file
+latex2(x, file = tempfile())
+
 }
 \keyword{ file }
 \keyword{ misc }
