@@ -2,11 +2,9 @@
 #	spread 
 
 
-monoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
-	stopifnot(inherits(obj, "VegsoupPartitionFidelity"))
-	
-	#	keep vegsoup object
-	obj0 <- obj
+monoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
+	stopifnot(inherits(obj, "VegsoupPartitionFidelity"))	
+	if (!is.ordinal(obj) & coverscale) coverscale <- FALSE
 	
 	obj <- synoptic(obj, stat.min = stat.min, p.max = p.max)
 	#	split by cluster and retain only the species that occur in that cluster
@@ -27,10 +25,10 @@ monoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 				}
 			}, simplify = FALSE)
 		}, simplify = FALSE)
-		class(ri) <- "monoptic"
 		r[[ i ]] <- ri
 	}
-#	class(r) <- "monoptic"
+	
+	names(r) <- 1:length(r)
 	class(r) <- c("list", "monoptic")
 	return(r)
 }

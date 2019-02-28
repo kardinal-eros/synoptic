@@ -10,7 +10,7 @@ Create synoptic objects.
 Create an object of class \code{synoptic} from a \code{\linkS4class{VegsoupPartitionFidelity}} object.
 }
 \usage{
-synoptic(obj, stat.min = 0.4, p.max = 0.05)
+synoptic(obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE)
 }
 \arguments{
   \item{obj}{
@@ -21,6 +21,9 @@ synoptic(obj, stat.min = 0.4, p.max = 0.05)
 }
   \item{p.max}{
 \code{numeric} threshold value of fisher test.
+}
+  \item{coverscale}{
+\code{logical}. Report quantiles in original abundance scale.
 }
 }
 

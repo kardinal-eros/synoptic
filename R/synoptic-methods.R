@@ -1,26 +1,27 @@
 #	simple accesor functions for apply calls to get list subcomponents
 #	not to be exported
-.fm   <- function (x) x$fm
-.fm.m <- function (x) which(x$fm.m)
-.fm.t <- function (x) any(x$fm.t)
-.ft.t <- function (x) any(x$ft.t)
-.ft.s <- function (x) x$ft.s
-.cs   <- function (x) x$cs
-.ct   <- function (x) x$ct
-.oc   <- function (x) x$cs > 0
-.ll   <- function (x) x$ll
-.ll.o <- function (x) x$ll.o
-.tt   <- function (x) x$tt
-.d    <- function (x) x$d
-.fq   <- function (x) x$fq
-.ft.n <- function (x) x$ft.n
-.ft.c <- function (x) x$ft.c
-.ff   <- function (x) x$ff
-.q0   <- function (x) x$q0
-.q0.25   <- function (x) x$q0.25
-.q0.5   <- function (x) x$q0.5
-.q0.75   <- function (x) x$q0.75
-.q1   <- function (x) x$q1
+.fm    <- function (x) x$fm
+.fm.m  <- function (x) which(x$fm.m)
+.fm.t  <- function (x) any(x$fm.t)
+.ft.t  <- function (x) any(x$ft.t)
+.ft.s  <- function (x) x$ft.s
+.cs    <- function (x) x$cs
+.ct    <- function (x) x$ct
+.oc    <- function (x) x$cs > 0
+.ll    <- function (x) x$ll
+.ll.o  <- function (x) x$ll.o
+.tt    <- function (x) x$tt
+.d     <- function (x) x$d
+.fq    <- function (x) x$fq
+.ft.n  <- function (x) x$ft.n
+.ft.c  <- function (x) x$ft.c
+.ff    <- function (x) x$ff
+.q0    <- function (x) x$q0
+.q0.25 <- function (x) x$q0.25
+.q0.5  <- function (x) x$q0.5
+.q0.75 <- function (x) x$q0.75
+.q1    <- function (x) x$q1
+.qs    <- function (x) x$qs
 
 .stat.min <- function (x) x$stat.min
 .p.max    <- function (x) x$p.max
@@ -33,13 +34,32 @@
 nc     <- function (x) length(x[[ 1 ]]$ct)
 
 # number of samples per cluster
-nc.n <- function (x) .nc.n(x[[ 1 ]])
+nc.n <- function (x) {
+		if (inherits(x, "monoptic")) {
+			stop("nc.n is not implemented for class monoptic", call. = FALSE)
+		} else {
+			.nc.n(x[[ 1 ]])			
+		}				
+}
 
 # applied threshold value for fidelity statistic
-stat.min <- function (x) .stat.min(x[[ 1 ]])
+stat.min <- function (x) {
+		if (inherits(x, "monoptic")) {
+			.stat.min(x[[ 1 ]][[ 1 ]])
+		} else {
+			.stat.min(x[[ 1 ]])			
+		}				
+}
 
 # applied threshold value for fisher test
-p.max <- function (x) .p.max(x[[ 1 ]])
+p.max <- function (x) {
+		if (inherits(x, "monoptic")) {
+			.p.max(x[[ 1 ]][[ 1 ]])
+		} else {
+			.p.max(x[[ 1 ]])			
+		}				
+}
+
 	
 #	numeric matrix of fidelity values
 fm     <- function (x) {
@@ -131,3 +151,6 @@ q0.25     <- function (x) as.vector(sapply(x, .q0.25) )
 q0.5     <- function (x) as.vector(sapply(x, .q0.5) )
 q0.75     <- function (x) as.vector(sapply(x, .q0.75) )
 q1     <- function (x) as.vector(sapply(x, .q1) )
+
+#	coverscale for quantiles
+qs <- function (x) as.vector(sapply(x, .qs))

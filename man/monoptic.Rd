@@ -9,17 +9,20 @@ Create monoptic objects.
 Create an object of class \code{monoptic} where clusters are separated from a \code{\linkS4class{VegsoupPartitionFidelity}} object.
 }
 \usage{
-monoptic(obj, stat.min = 0.4, p.max = 0.05)
+monoptic(obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE)
 }
 \arguments{
   \item{obj}{
 \code{synoptic} object.
 }
   \item{stat.min}{
-\code{numeric} threshold value of fidelity statistics.
+\code{numeric}. Threshold value of fidelity statistics.
 }
   \item{p.max}{
-\code{numeric} threshold value of fisher test.
+\code{numeric}. Threshold value of fisher test.
+}
+  \item{coverscale}{
+\code{logical}. Report quantiles in original abundance scale.
 }
 }
 

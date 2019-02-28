@@ -1,8 +1,13 @@
-importFrom("vegsoup", splitAbbr, layers, partitioning, getK, contingency, constancy, colSums, layernumber, partitions, quantile)
+importFrom("vegsoup", splitAbbr, layers, partitioning, getK, getStat, contingency, constancy, colSums, FisherTest, is.ordinal, layernumber, partitions, quantile)
 importFrom("stats", median)
 importFrom("utils", head)
 
 exportPattern("^[[:alpha:]]+")
+
+S3method("[", synoptic)
+S3method("[", monoptic)
+
+S3method("[[", monoptic)
 
 S3method(print, synoptic)
 S3method(print, monoptic)

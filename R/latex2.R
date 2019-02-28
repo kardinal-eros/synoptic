@@ -8,10 +8,10 @@ latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundanc
 	#	is.na(ft.c(rr0)) # use for tex commands 
 	
 	#	rare species
-	r0 <- obj [ fq(obj) <= abundance ]
+	r0 <- obj[ fq(obj) <= abundance ]
 
 	#	abundant species
-	r  <- obj [ fq(obj) > abundance ]
+	r  <- obj[ fq(obj) > abundance ]
 
 	#	the diagnostic species
 	rd <- r[ d(r) ]
@@ -53,9 +53,17 @@ latex2.monoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundanc
 	r <- vector("list", length = k)
 	for (i in 1:k) {
 		ri <- obj[[ i ]]
+		
+		#	rare species
+		ri0 <- ri[ fq(ri) <= abundance ]
+
+		#	abundant species
+		ri  <- ri[ fq(ri) > abundance ]
+				
 		ri <- fq.up(ri)
-		class(ri) <- "monoptic"
-		r[[ i ]] <- c(paste("% cluster", i), longtable(ri))
+		r[[ i ]] <- c(paste("% cluster", i),
+			longtable(x = ri, y = ri0, #ifelse(length(ri0) > 0, ri0, NULL),
+			stat.min = stat.min(obj), k = i))
 	}
 
 	tex <- template2(paper = paper)

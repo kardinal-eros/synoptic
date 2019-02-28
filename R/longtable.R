@@ -70,8 +70,13 @@ begin.longtable <- function (width = 0, columntype = "p", unit = "mm") {
 	return(r)	
 }
 
-caption <- function (stat.min = NULL, nc.n = NULL, sp = NULL) {
-	r <- paste0(c(
+caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = NULL, sp = NULL, k = NULL) {
+	if (missing(what)) what <- "synoptic"
+	WHAT <- c("synoptic", "monoptic")
+	what <- match.arg(what, WHAT)
+	
+	if (what == "synoptic") {
+		r <- paste0(c(
 			"Synoptic table for ",
 			length(nc.n),
 			" partitions. ",
@@ -80,11 +85,24 @@ caption <- function (stat.min = NULL, nc.n = NULL, sp = NULL) {
 			". ",
 			"Total number of relevees: ",
 			sum(nc.n),
-			". Number and species: ",
-			sum(sp),			
-			paste(1:length(nc.n), nc.n, sep = ":", collapse = ", "),
+			". Total number and species: ",
+			sum(sp),
+#			". Number of species per cluster: ",			
+#			paste(1:length(nc.n), nc.n, sep = ":", collapse = ", "),
 			"."
 		), collapse = "")
+	}
+	if (what == "monoptic") {
+		r <- paste0(c(
+			"Summary table for partiton ",
+			k,
+			". ",			
+			"Statistics threshold: ",
+			stat.min * 100,
+			"."
+		), collapse = "")	
+	}
+				
 	r <- paste0("\\caption{", r, "}", collapse = "")	
 	return(r)			
 }
@@ -122,7 +140,7 @@ list2tex.monoptic <- function (x, seperate, what) {
 	
 	r <- cbind(tt(x), ll(x), c(cs(x)), c(ct(x)),
 		q0(x), q0.25(x), q0.5(x), q0.75(x), q1(x),
-		as.character(factor(d(x), levels = c(TRUE, FALSE), labels = c("diag. species", ""))),
+		as.character(factor(d(x), levels = c(TRUE, FALSE), labels = c("yes", ""))),
 		round(c(fm(x)), 3))
 	r <- apply(r, 1, function (x) paste(paste(x, collapse = " & "), "\\tabularnewline"))
 
@@ -131,36 +149,48 @@ list2tex.monoptic <- function (x, seperate, what) {
 
 #	convert list into species list and warp into tex multicols environment 
 footer <- function (x, columns = 2) {
-	if (length(x) > 0) {
-		r <- tb.0(x)
-		r[] <- rep(1:ncol(r), each = nrow(r))
-		r[] <- paste(r, ct(x), sep = ":")
-		r[ ct(x) == 0 ] <- ""
-		r <- apply(r, 1, function (x) paste(x[ x != "" ], collapse = ","))
-		r <- cbind(tt(x), ll(x), ll.o(x), r)
-		r <- r[order(r[ ,1 ], r[ ,3 ]), -3]
+	if (inherits(x, "synoptic")) {
+		if (length(x) > 0) {
+			r <- tb.0(x)
+			r[] <- rep(1:ncol(r), each = nrow(r))
+			r[] <- paste(r, ct(x), sep = ":")
+			r[ ct(x) == 0 ] <- ""
+			r <- apply(r, 1, function (x) paste(x[ x != "" ], collapse = ","))
+			r <- cbind(tt(x), ll(x), ll.o(x), r)
+			r <- r[order(r[ ,1 ], r[ ,3 ]), -3 ]
 
-		r <- paste(apply(r, 1, paste, collapse = " "), collapse = ", ")
-		r <- gsub("  ", " ", r, fixed = TRUE)
+			r <- paste(apply(r, 1, paste, collapse = " "), collapse = ", ")
+			r <- gsub("  ", " ", r, fixed = TRUE)
 
-		r <- paste(r, collapse = ";")
+			r <- paste(r, collapse = ";")
+	
+			r <- c(paste0("\\begin{multicols}{", columns, "}"),
+				"\\footnotesize{",
+				r,
+				"}",
+				"\\end{multicols}")
+			} else {
+				r <- "% no footer appended"
+			}
+	} else {
+		r <- tt(x)
+		r <- paste(r, collapse = ", ")
 	
 		r <- c(paste0("\\begin{multicols}{", columns, "}"),
 			"\\footnotesize{",
+#			"Abundance treshold: ", NA, ". ",	
 			r,
 			"}",
-			"\\end{multicols}")
-		} else {
-			r <- "% no footer appended"
-		}	
-		return(r)
+			"\\end{multicols}")		
+	}	
+	return(r)
 }
 
-longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), seperate = TRUE, what = "layer", columns = 2) {
+longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE, what = "layer", columns = 2) {
 	UseMethod("longtable")
 }
 
-longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), seperate = TRUE, what = "layer", columns = 2) {
+longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE, what = "layer", columns = 2) {
 	
 	#	append a table footer 
 	if (missing(y)) {
@@ -222,7 +252,7 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	head <- c(head1, "\\tabularnewline", head2)
 	r[[  2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, nc)),
 								columntype = c("p", "c", rep("d", nc)) )
-	r[[  3 ]] <- caption(stat.min, nc.n)
+	r[[  3 ]] <- caption(stat.min = stat.min, what = "synoptic", nc.n = nc.n)
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
@@ -232,7 +262,7 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	return(unlist(r))
 }
 
-longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n, seperate, what, columns) {
+longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n, k, seperate, what, columns = 2) {
 
 	r <- list(
 		c(
@@ -256,9 +286,9 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 		NULL, # table header (\multicolumn{})
 		c(
 			"\\tabularnewline",
-			"\\midrule",
-			"\\endhead",
-			"\\midrule"
+#			"\\midrule",
+			"\\endhead"#,
+#			"\\midrule"
 		),
 		NULL, # table foot (\multicolumn{})
 		c(
@@ -282,16 +312,23 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	head <- paste(sapply(c("Taxon", "Layer", "Constancy", "Contingency",
 		"Min", "Lower", "Median", "Upper", "Max", "Typical", "Statistic"),
 		multicolumn, format = "c"), collapse = "&")
-	foot <- head
+	foot <- "%"
 	
-	r[[  2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 7), 30, 3.2),
-								columntype = c("p", "c", rep("d", 7), "c", "d") )
-	r[[  3 ]] <- caption(stat.min)
+	#	format qunatile columns accoring to coverscale
+	if (all(qs(x))) {
+		body <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 2), rep(col.width, 5), col.width, 3.2),
+								columntype = c("p", "c", rep("d", 2), rep("c", 5), "c", "d") )			
+	} else {
+		body <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 7), 30, 3.2),
+								columntype = c("p", "c", rep("d", 7), "c", "d") )		
+	}
+	r[[  2 ]] <- body
+	r[[  3 ]] <- caption(stat.min = stat.min, what = "monoptic", k = k)
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
 	r[[ 11 ]] <- list2tex(x)
-	r[[ 15 ]] <- footer(NULL)
+	r[[ 15 ]] <- footer(y, columns = columns)
 	
 	return(unlist(r))
 

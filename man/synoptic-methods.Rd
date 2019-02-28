@@ -27,6 +27,7 @@
 \alias{q0.5}
 \alias{q0.75}
 \alias{q1}
+\alias{qs}
 
 \title{
 Get components of synoptic objects.
@@ -67,6 +68,7 @@ q0.25(x)
 q0.5(x)
 q0.75(x)
 q1(x)
+qs(x)
 }
 
 \arguments{
@@ -147,6 +149,9 @@ q1(x)
   }
   \item{ \code{q0}, \code{q0.25}, \code{q0.5}, \code{q0.75}, \code{q1} }{
     Get abundance quantiles.
+  }
+  \item{ \code{qs} }{
+    If \code{TRUE} abundance quantiles are available in original abundance scale.
   }
  }
 

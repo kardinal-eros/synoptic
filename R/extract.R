@@ -1,3 +1,32 @@
+###  Subsetting and mutation methods
+#	list of monoptic objects as returned by monoptic()
+"[[.monoptic" <- function (x, ...) {
+    c <- oldClass(x)
+    class(x) <- NULL
+    r <- NextMethod("[[")
+    class(r) <- c
+    return(r)
+}
+
+#	monoptic object
+"[.monoptic" <- function (x, ...) {
+    c <- oldClass(x)
+    class(x) <- NULL
+    r <- NextMethod("[")
+    class(r) <- c
+    return(r)
+}
+
+#	synoptic object
+"[.synoptic" <- function (x, ...) {
+    c <- oldClass(x)
+    class(x) <- NULL
+    r <- NextMethod("[")
+    class(r) <- c
+    return(r)
+}
+
+
 ###	section of indexing functions
 #	as ft.s but logical matrix with TRUE for sig.
 ft.s.ij   <- function (x) {

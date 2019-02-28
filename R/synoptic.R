@@ -1,8 +1,9 @@
-synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
+synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 	stopifnot(inherits(obj, "VegsoupPartitionFidelity"))
-		
-	ft <- obj@fisher.test            # fisher test
-	fm <- obj@stat                   # fidelity measure
+	if (!is.ordinal(obj) & coverscale) coverscale <- FALSE	
+
+	ft <- FisherTest(obj)            # fisher test
+	fm <- getStat(obj)               # fidelity measure
 	
 	ct <- contingency(obj)           # contingency table
 	cs <- constancy(obj)             # constancy table
@@ -20,8 +21,10 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 #	nc.s <- richness(obj, "part")    # number of species per cluster
 	n <- ncol(obj)                   # number of species
 	
-	qq <- quantile(obj, coverscale = TRUE)
+	qq <- quantile(obj, coverscale = coverscale)
 	qx <- dimnames(qq)[[ 3 ]]
+	qs <- coverscale
+	
 	q0 <- qq[ , , qx = "q0"]
 	q0.25 <- qq[ , , qx = "q0.25"]
 	q0.5 <- qq[ , , qx = "q0.5"]
@@ -60,6 +63,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 			ft.c = NA,               # index to cluster with sig. fisher test
 			ff   = FALSE,            # fidelity measure above treshold but at least 1 sig. fisher test
 
+			qs   = NA,               # save argument coverscale from quantile
 			q0   = rep("", nc),      # min cover			
 			q0.25 = rep("", nc),     # lower frindge cover
 			q0.5  = rep("", nc),     # median cover
@@ -93,6 +97,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05) {
 		r[[ i ]]$ft.c <- which(r[[ i ]]$ft.t )
 		r[[ i ]]$ff <- !r[[ i ]]$d & any(r[[ i ]]$ft.t)
 
+		r[[ i ]]$qs <- qs
 		r[[ i ]]$q0 <- as.vector(qq[ i, , qx = "q0" ])				
 		r[[ i ]]$q0.25 <- as.vector(qq[ i, , qx = "q0.25" ])
 		r[[ i ]]$q0.5 <- as.vector(qq[ i, , qx = "q0.5" ])

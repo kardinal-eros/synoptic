@@ -18,12 +18,12 @@ LaTex utility functions to create longtable structure.
 }
 \usage{
 longtable(x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10,
-          columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), seperate = TRUE,
+          columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE,
           what = "layer", columns = 2)
 list2tex(x, seperate, what)
 begin.longtable(width = 0, columntype = "p", unit = "mm")
 multicolumn(text = "NULL", format = "c", number = 1, newline = FALSE, textbf = FALSE)
-caption(stat.min = NULL, nc.n = NULL, sp = NULL)
+caption(stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = NULL, sp = NULL, k = NULL)
 footer(x, columns = 2)
 glyphs(x)
 }
@@ -57,10 +57,13 @@ glyphs(x)
 \code{character}. Any unit suitable for Latex.
 }
   \item{nc}{
-\code{numeric}.  See \code{\link{nc}}
+\code{numeric}. See \code{\link{nc}}
 }
   \item{nc.n}{
-\code{numeric}.  See \code{\link{nc.n}}
+\code{numeric}. See \code{\link{nc.n}}
+}
+  \item{k}{
+\code{numeric}. Useful for class monoptic only.
 }
   \item{seperate}{
 \code{logical}. If \code{TRUE} add seperating lines.
