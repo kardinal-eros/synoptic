@@ -232,7 +232,7 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	return(unlist(r))
 }
 
-longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm") {
+longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n, seperate, what, columns) {
 
 	r <- list(
 		c(

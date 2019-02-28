@@ -1,12 +1,19 @@
-importFrom("vegsoup", splitAbbr, layers, partitioning, getK, contingency, constancy, colSums, layernumber, partitions, quantile) # spread
-
+importFrom("vegsoup", splitAbbr, layers, partitioning, getK, contingency, constancy, colSums, layernumber, partitions, quantile)
 importFrom("stats", median)
-
 importFrom("utils", head)
 
 exportPattern("^[[:alpha:]]+")
 
 S3method(print, synoptic)
 S3method(print, monoptic)
+
 S3method(summary, synoptic)
-#S3method(spread, synoptic)
+
+S3method(latex2, synoptic)
+S3method(latex2, monoptic)
+
+S3method(list2tex, synoptic)
+S3method(list2tex, monoptic)
+
+S3method(longtable, synoptic)
+S3method(longtable, monoptic)
