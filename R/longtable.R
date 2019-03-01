@@ -21,7 +21,7 @@ template2 <- function (paper = "a4paper", color = "lightgray") {
 			"\\usepackage{array, dcolumn, booktabs, longtable}",
 			"\\usepackage{multicol}",
 			"\\usepackage{xcolor,colortbl}",
-			"\\usepackage{cmbright}",			
+			#"\\usepackage{cmbright}",			
 			"",
 			paste0("\\newcommand{\\cc}{\\cellcolor{", color, "}}"),
 			"\\newcolumntype{P}[1]{>{\\raggedright\\arraybackslash}p{#1}}",
@@ -92,7 +92,7 @@ caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = N
 	if (what == "monoptic") {
 		r <- paste0(c(
 			"Summary table for partition ",
-			k,
+			"\\textbf{", k, "}",
 			" with ",
 			nc.n,
 			" plots and ",
@@ -101,8 +101,10 @@ caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = N
 			"Statistics threshold (multiplied by 100): ",
 			stat.min * 100,
 			". ",
-			"Faithfull species for the partition are highlighted in bold face; ",
-			"those faithfull to other partitions are depicted in italics."
+			"Faithful species for this particular partition are depicted in bold face; ",
+			"those species beeing faithful in another partition, not this particular one, are highlighted with an asterisc and in bold-italic.",		
+			"Finally, species that are faithful to any partition but do not achieve a significant",
+			"Fisher test (negatively associated with this particular cluster) are marked with two asteriscs and in italic typeface."
 		), collapse = "")
 	}
 		

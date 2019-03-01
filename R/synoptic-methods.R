@@ -46,7 +46,11 @@ nc.n <- function (x) {
 # applied threshold value for fidelity statistic
 stat.min <- function (x) {
 		if (inherits(x, "monoptic")) {
-			.stat.min(x[[ 1 ]][[ 1 ]])
+			if (inherits(x, "list")) {
+				.stat.min(x[[ 1 ]][[ 1 ]])
+			} else {
+				.stat.min(x[[ 1 ]])				
+			}		
 		} else {
 			.stat.min(x[[ 1 ]])
 		}
@@ -55,7 +59,11 @@ stat.min <- function (x) {
 # applied threshold value for fisher test
 p.max <- function (x) {
 		if (inherits(x, "monoptic")) {
+			if (inherits(x, "list")) {			
 			.p.max(x[[ 1 ]][[ 1 ]])
+			} else {
+				.p.max(x[[ 1 ]])				
+			}			
 		} else {
 			.p.max(x[[ 1 ]])
 		}
@@ -119,8 +127,11 @@ ll.o   <- function (x) as.vector(sapply(x, .ll.o))
 #	numeric vector of species fequencies
 tt     <- function (x) as.vector(sapply(x, .tt) )
 
-#	logical vector, TRUE if faithful species
+#	logical vector, TRUE if faithful species across all partitions (class synoptic)
 d      <- function (x) as.vector(sapply(x, .d) )
+
+#	logical vector, TRUE if faithful species in a particular partition (class monoptic)
+dc <- function (x) c(fm(x)) >= stat.min(x)
 
 #	fisher test within p.max
 ft.t   <- function (x) as.vector(sapply(x, .ft.t) )

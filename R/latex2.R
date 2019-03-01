@@ -31,7 +31,7 @@ latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance 
 	
 	if (faithful) r <- rd else r <- rr
 	
-	class(r) <- "synoptic"
+	class(r) <- "synoptic" # we loose class somewhere
 	
 	tex <- template2(paper = paper)
 	

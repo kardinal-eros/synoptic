@@ -16,6 +16,7 @@
 \alias{ll.o}
 \alias{tt}
 \alias{d}
+\alias{dc}
 \alias{ft.t}
 \alias{ft.s}
 \alias{ft.n}
@@ -58,6 +59,7 @@ ll.o(x)
 tt(x)
 
 d(x)
+dc(x)
 
 ft.t(x)
 ft.s(x)
@@ -132,6 +134,11 @@ qs(x)
     Returns \verb{TRUE} for faithful species, those with fidelity values
     and Fisher test above threshold (\verb{stat.min} and \verb{p.max}) in
     at least in one cluster.
+  }
+  \item{ \code{dc} }{
+    Returns \verb{TRUE} for faithful species, as above, but only in a
+    particular partition, hence only applicable for class
+    \verb{monoptic}.
   }
   \item{ \code{ft.t} }{
     Reports if Fisher test is within threshold \verb{p.max}.

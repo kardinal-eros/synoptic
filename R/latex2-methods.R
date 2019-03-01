@@ -84,11 +84,18 @@ q.tex <- function (x) {
 #	latex utility function to highlight faithful species
 tt.tex <- function (x) {
 	r <- tt(x)
-	i <- d(x) & ft.t(x)
-	r[ i ] <- paste0("\\textbf{", r[ i ], "}")
+
+	#	faithful in this particular partition: bold
+	i1 <- dc(x) & ft.t(x)	
+	#	faithful in any partition: bold-italic
+	i2 <- d(x) & ft.t(x)
+	i2[ i1 ] <- FALSE
+	#	not faithful in this particular partition but in another: italic
+	i3 <- d(x) & !ft.t(x)	
 	
-	i <- d(x) & !ft.t(x)
-	r[ i ] <- paste0("\\textit{", r[ i ], "}")
+	r[ i1 ] <- paste0("\\textbf{", r[ i1 ], "}")	
+	r[ i2 ] <- paste0("\\textit{\\textbf{* ", r[ i2 ], "}}")	
+	r[ i3 ] <- paste0("\\textit{** ", r[ i3 ], "}")
 	
 	return(r)
 }
