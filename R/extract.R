@@ -1,10 +1,10 @@
-###  Subsetting and mutation methods
+###  subsetting and mutation methods
 #	list of monoptic objects as returned by monoptic()
 "[[.monoptic" <- function (x, ...) {
     c <- oldClass(x)
     class(x) <- NULL
     r <- NextMethod("[[")
-    class(r) <- c
+    class(r) <- c[ -grep("list", c) ]
     return(r)
 }
 
@@ -27,7 +27,7 @@
 }
 
 
-###	section of indexing functions
+###	section of pointer (index) functions
 #	as ft.s but logical matrix with TRUE for sig.
 ft.s.ij   <- function (x) {
 	r <- ft.s(x)
@@ -55,7 +55,7 @@ ft.c2 <- function (x) {
 	return(r)
 }
 #	character vector with strings identifing species by cluster groups
-ft.nc.c <- function (x, collapse = " + ") {		
+ft.nc.c <- function (x, collapse = " + ") {
 		x1 <- x[  ft.t(x) ] # empty if no sig. species
 		x0 <- x[ !ft.t(x) ] # do nothing
 		if (ft.any(x)) {
@@ -68,17 +68,17 @@ ft.nc.c <- function (x, collapse = " + ") {
 }
 #	matrix of constancies and fisher test
 cs.ft <- function (x) {
-	xx <- ft.s(x)
-	xx[] <- paste(cs(x), ft.s(x))
-	return(xx)
+	r <- ft.s(x)
+	r[] <- paste(cs(x), ft.s(x))
+	return(r)
 }
-#	matrix of constancies and fisher test
+#	matrix of fidelity values and fisher test
 fm.ft <- function (x) {
-	xx <- ft.s(x)
-	xx[] <- paste(round(fm(x), 3) * 100, ft.s(x))
-	return(xx)
+	r <- ft.s(x)
+	r[] <- paste(round(fm(x), 3) * 100, ft.s(x))
+	return(r)
 }
-#	empty matrix in text modefor further manipulation
+#	empty matrix in text mode for further manipulation
 tb.0 <- function (x) {
 	r <- cs(x)
 	r[] <- ""

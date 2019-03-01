@@ -12,10 +12,15 @@ ll.up <- function (x) {
 #	order by fidelity values
 fm.up <- function (x) {
 	if (inherits(x, "monoptic")) {
-		r <- x[ order(c(fm(x))) ]
+		r <- x[ order(-c(fm(x))) ]
 	} else {
-		r <- x[ order(fm.m(x)) ]
-	}		
+		if (any(d(x))) {
+			r <- x[ order(fm.m(x)) ]
+		} else {
+			message("no diagnostic species within treshold")
+			r <- x
+		}
+	}
 	
 	return(r)
 }
@@ -35,7 +40,7 @@ ft.up <- function (x, warn = TRUE) {
 			if (warn)
 				message("not a single species is significant for a fisher test")
 			r <- x
-		}		
+		}
 	}
 	
 	return(r)

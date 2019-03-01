@@ -19,12 +19,12 @@ LaTex utility functions to create longtable structure.
 \usage{
 longtable(x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10,
           columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE,
-          what = "layer", columns = 2)
+          what = "layer", abundance = 0, columns = 2)
 list2tex(x, seperate, what)
 begin.longtable(width = 0, columntype = "p", unit = "mm")
 multicolumn(text = "NULL", format = "c", number = 1, newline = FALSE, textbf = FALSE)
 caption(stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = NULL, sp = NULL, k = NULL)
-footer(x, columns = 2)
+footer(x, columns = 2, abundance)
 glyphs(x)
 }
 
@@ -70,6 +70,10 @@ glyphs(x)
 }
   \item{what}{
 \code{character}. Either \code{"layer"} or \code{"cluster"}.
+}
+  \item{abundance}{
+\code{numeric}. Abundance threshold for species to be omitted from the main
+and put to the table footer.
 }
   \item{columns}{
 \code{numeric}. Number of columns in table footer.

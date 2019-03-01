@@ -1,13 +1,4 @@
-#	\makeatletter
-#	\def\dynscriptsize{\check@mathfonts\fontsize{\sf@size}{\z@}\selectfont}
-#	\makeatother
-#	\def\textunderset#1#2{\leavevmode
-#	  \vtop{\offinterlineskip\halign{%
-#	    \hfil##\hfil\cr\strut#2\cr\noalign{\kern-.3ex}
-#	    \hidewidth\dynscriptsize\strut#1\hidewidth\cr}}}
-    
-#	\textunderset{1-2a}{100}+^{***}_{+44}
-
+#	clean glyphs to accomodate latex demands
 glyphs <- function (x) {
 	#	MULTIPLICATION X
 	x <- gsub("\u2715", "$\\times$", x, fixed = TRUE)
@@ -18,12 +9,12 @@ glyphs <- function (x) {
 	#	WHAT ELSE?
 	return(x)
 }
-		
-#	latex template
+
+#	latex template with column types
 template2 <- function (paper = "a4paper", color = "lightgray") {
 	r <- list(
 		c(
-			"\\documentclass[9pt]{article}",
+			"\\documentclass[10pt]{article}",
 			paste0("\\usepackage[", paper, "]{geometry}"),
 			"\\usepackage[T1]{fontenc}",
 			"\\usepackage[english]{babel}",
@@ -34,7 +25,8 @@ template2 <- function (paper = "a4paper", color = "lightgray") {
 			"",
 			paste0("\\newcommand{\\cc}{\\cellcolor{", color, "}}"),
 			"\\newcolumntype{P}[1]{>{\\raggedright\\arraybackslash}p{#1}}",
-			"\\newcolumntype{d}[1]{D{+}{\\,}{#1}}",
+			"\\newcolumntype{X}[1]{D{+}{\\,}{#1}}",# to align super- and subscripts
+			"\\newcolumntype{d}[1]{D{.}{.}{#1}}",  # traditional dcolumns			
 			"",
 			"\\begin{document}"
 		),
@@ -42,10 +34,11 @@ template2 <- function (paper = "a4paper", color = "lightgray") {
 		c(
 		"\\end{document}"
 		) )
-	#r[[ 1 ]][ 2 ] <- gsub("paper", paste0(paper, "paper"), r[[ 1 ]][ 2 ], fixed = TRUE)	
-	return(r)	
+	#r[[ 1 ]][ 2 ] <- gsub("paper", paste0(paper, "paper"), r[[ 1 ]][ 2 ], fixed = TRUE)
+	return(r)
 }
 
+#	construct multicolumn markup
 multicolumn <- function (text = "NULL", format = "c", number = 1, newline = FALSE, textbf = FALSE) {
 	if (textbf) text <- paste("\\textbf{", text, "}")
 	r <- "\\multicolumn{NUMBER}{FORMAT}{TEXT}"
@@ -55,21 +48,25 @@ multicolumn <- function (text = "NULL", format = "c", number = 1, newline = FALS
 	if (newline) r <- paste0(r, "\\tabularnewline")
 	return(r)	
 }
-	
+
+#	construct column types markup	
 begin.longtable <- function (width = 0, columntype = "p", unit = "mm") {
 	r <- vector("character", length(columntype))
 	for (i in seq_along(columntype)){
 		if (columntype[ i ] == "p")
 			r[ i ] <- paste0(columntype[ i ], "{", width[ i ], unit, "}")
+		if (columntype[ i ] == "X")
+			r[ i ] <- paste0(columntype[ i ], "{", width[ i ], "}")
 		if (columntype[ i ] == "d")
 			r[ i ] <- paste0(columntype[ i ], "{", width[ i ], "}")
-		if (columntype[ i ] != "p" & columntype[ i ] != "d")
+		if (columntype[ i ] != "p" & columntype[ i ] != "d" & columntype[ i ] != "X")
 			r[ i ] <- columntype[ i ]
 	} 
 	r <- paste0("\\begin{longtable}", "{", paste0(r, collapse = ""), "}")
 	return(r)	
 }
 
+#	construct caption markup
 caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = NULL, sp = NULL, k = NULL) {
 	if (missing(what)) what <- "synoptic"
 	WHAT <- c("synoptic", "monoptic")
@@ -80,34 +77,36 @@ caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = N
 			"Synoptic table for ",
 			length(nc.n),
 			" partitions. ",
-			"Statistics threshold: ",
+			"Statistics threshold (multiplied by 100): ",
 			stat.min * 100,
 			". ",
 			"Total number of relevees: ",
 			sum(nc.n),
 			". Total number and species: ",
 			sum(sp),
-#			". Number of species per cluster: ",			
+#			". Number of species per cluster: ",
 #			paste(1:length(nc.n), nc.n, sep = ":", collapse = ", "),
 			"."
 		), collapse = "")
 	}
 	if (what == "monoptic") {
 		r <- paste0(c(
-			"Summary table for partiton ",
+			"Summary table for partition ",
 			k,
-			". ",			
-			"Statistics threshold: ",
+			". ",
+			"Statistics threshold (multiplied by 100): ",
 			stat.min * 100,
-			"."
-		), collapse = "")	
+			". ",
+			"Faithfull species for the partition are highlighted in bold face; ",
+			"those faithfull to other partitions are depicted in italics."
+		), collapse = "")
 	}
-				
-	r <- paste0("\\caption{", r, "}", collapse = "")	
-	return(r)			
+		
+	r <- paste0("\\caption{", r, "}", collapse = "")
+	return(r)
 }
 
-
+#	craete generic
 list2tex <- function (x, seperate, what) {
 	UseMethod("list2tex")
 }	
@@ -128,7 +127,7 @@ list2tex.synoptic <- function (x, seperate = TRUE, what = "cluster") {
 			n <- rle(ft.nc.c(x))
 			i1 <- cumsum(n$lengths)[ -length(n$values) ] # omit last
 			i2 <- sort(c(i1, 1:length(x)))
-			r <- r[i2]	
+			r <- r[ i2 ]	
 			r[ i1 + (1:length(i1)) ] <- "\\tabularnewline"
 		}	
 	}
@@ -138,17 +137,14 @@ list2tex.synoptic <- function (x, seperate = TRUE, what = "cluster") {
 #	convert list object to tex commands for objects of class monoptic
 list2tex.monoptic <- function (x, seperate, what) {
 	
-	r <- cbind(tt(x), ll(x), c(cs(x)), c(ct(x)),
-		q0(x), q0.25(x), q0.5(x), q0.75(x), q1(x),
-		as.character(factor(d(x), levels = c(TRUE, FALSE), labels = c("yes", ""))),
-		round(c(fm(x)), 3))
+	r <- cbind(tt.tex(x), ll(x), ct.tex.d(x), q.tex(x), round(c(fm(x)), 2) * 100)
 	r <- apply(r, 1, function (x) paste(paste(x, collapse = " & "), "\\tabularnewline"))
 
 	return(r)
 }
 
 #	convert list into species list and warp into tex multicols environment 
-footer <- function (x, columns = 2) {
+footer <- function (x, columns = 2, abundance) {
 	if (inherits(x, "synoptic")) {
 		if (length(x) > 0) {
 			r <- tb.0(x)
@@ -166,6 +162,7 @@ footer <- function (x, columns = 2) {
 	
 			r <- c(paste0("\\begin{multicols}{", columns, "}"),
 				"\\footnotesize{",
+				"Species below abundance threshold ", abundance, ": ",
 				r,
 				"}",
 				"\\end{multicols}")
@@ -178,21 +175,21 @@ footer <- function (x, columns = 2) {
 	
 		r <- c(paste0("\\begin{multicols}{", columns, "}"),
 			"\\footnotesize{",
-#			"Abundance treshold: ", NA, ". ",	
+			"Species below abundance threshold ", abundance, ": ",
 			r,
 			"}",
-			"\\end{multicols}")		
+			"\\end{multicols}")
 	}	
 	return(r)
 }
 
-longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE, what = "layer", columns = 2) {
+longtable <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE, what = "layer", abundance = 0, columns = 2) {
 	UseMethod("longtable")
 }
 
-longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE, what = "layer", columns = 2) {
+longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc = nc(x), nc.n = nc.n(x), k, seperate = TRUE, what = "layer", abundance = 0, columns = 2) {
 	
-	#	append a table footer 
+	#	append a table footer
 	if (missing(y)) {
 		y <- NA
 	}
@@ -225,7 +222,7 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 		),
 		NULL, # table foot (\multicolumn{})
 		c(
-			"\\tabularnewline",		
+			"\\tabularnewline",
 			"\\midrule",
 			"\\tabularnewline",	
 			"\\endfoot"
@@ -251,18 +248,18 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 			
 	head <- c(head1, "\\tabularnewline", head2)
 	r[[  2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, nc)),
-								columntype = c("p", "c", rep("d", nc)) )
+								columntype = c("p", "c", rep("X", nc)) )
 	r[[  3 ]] <- caption(stat.min = stat.min, what = "synoptic", nc.n = nc.n)
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
 	r[[ 11 ]] <- list2tex(x, seperate = seperate, what = what)
-	r[[ 15 ]] <- footer(y, columns = columns)	
+	r[[ 15 ]] <- footer(y, columns = columns, abundance = abundance)
 	
 	return(unlist(r))
 }
 
-longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n, k, seperate, what, columns = 2) {
+longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n, k, seperate, what, abundance = 0, columns = 2) {
 
 	r <- list(
 		c(
@@ -286,15 +283,15 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 		NULL, # table header (\multicolumn{})
 		c(
 			"\\tabularnewline",
-#			"\\midrule",
+			"\\midrule",
 			"\\endhead"#,
 #			"\\midrule"
 		),
 		NULL, # table foot (\multicolumn{})
 		c(
-			"\\tabularnewline",		
+			"%\\tabularnewline",
 			"\\midrule",
-			"\\tabularnewline",	
+			"%\\tabularnewline",
 			"\\endfoot"
 		),
 		NULL, # table body
@@ -309,26 +306,28 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 		NULL # table footer
 		)
 
-	head <- paste(sapply(c("Taxon", "Layer", "Constancy", "Contingency",
-		"Min", "Lower", "Median", "Upper", "Max", "Typical", "Statistic"),
+	head <- paste(sapply(c("Taxon", "Layer", "Constancy",
+		"Min", "Lower", "Median", "Upper", "Max",
+		#"Typical", boldface taxon
+		"Statistic"),
 		multicolumn, format = "c"), collapse = "&")
 	foot <- "%"
 	
-	#	format qunatile columns accoring to coverscale
+	#	format quantile columns accoring to coverscale d vs. c columns
 	if (all(qs(x))) {
-		body <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 2), rep(col.width, 5), col.width, 3.2),
-								columntype = c("p", "c", rep("d", 2), rep("c", 5), "c", "d") )			
+		columntypes <- begin.longtable(width = c(taxa.width, layer.width, 3.2, rep(col.width, 5), 3.2),
+								columntype = c("p", "c", "X", rep("c", 5), "d") )
 	} else {
-		body <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 7), 30, 3.2),
-								columntype = c("p", "c", rep("d", 7), "c", "d") )		
+		columntypes <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, 7)),
+								columntype = c("p", "c", "X", rep("d", 5), "d") )
 	}
-	r[[  2 ]] <- body
+	r[[  2 ]] <- columntypes
 	r[[  3 ]] <- caption(stat.min = stat.min, what = "monoptic", k = k)
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
 	r[[ 11 ]] <- list2tex(x)
-	r[[ 15 ]] <- footer(y, columns = columns)
+	r[[ 15 ]] <- footer(y, columns = columns, abundance = abundance)
 	
 	return(unlist(r))
 

@@ -30,10 +30,13 @@
 \alias{qs}
 
 \title{
-Get components of synoptic objects.
+ Get components of synoptic objects.
 }
 \description{
-A set of simple accessor functions to obtain components, summary tables or index-like vectors and matrices of \verb{synoptic} objects. The function names are held as short as possible, reoccuring acronyms include the following: \emph{ft} stands for Fisher test and \emph{fm} for fidelity measure.
+ A set of simple functions to obtain components, summary tables or index-like
+ vectors and matrices of \verb{synoptic} objects. The function names are held
+ as short as possible, reoccurring acronyms include the following: \emph{ft}
+ stands for Fisher test and \emph{fm} for fidelity measure.
 }
 \usage{
 nc(x)
@@ -60,8 +63,9 @@ ft.t(x)
 ft.s(x)
 ft.n(x)
 ft.c(x)
-ff(x)
 ft.any(x)
+
+ff(x)
 
 q0(x)
 q0.25(x)
@@ -85,81 +89,84 @@ qs(x)
 
  \describe{
   \item{ \code{nc} }{
-    returns number of clusters
+    Returns number of clusters.
   }
   \item{ \code{nc.n} }{
-    returns number of samples per cluster
+    Returns number of plots per cluster.
   }
   \item{ \code{stat.min} }{
-    reports the applied threshold value for fidelity statistic
+    Reports the applied threshold value for fidelity statistic.
   }
   \item{ \code{p.max} }{
-    reports the applied threshold value for Fisher test
+    Reports the applied threshold value of Fisher test.
   }
   \item{ \code{fm} }{
-    obtains fidelity values
+    Returns fidelity values.
   }
   \item{ \code{fm.m} }{
-    returns the cluster with highest fidelity value
+    Returns the cluster with highest fidelity value for each species.
   }
   \item{ \code{cs} }{
-    returns a constancy table
+    Returns a constancy table.
   }
   \item{ \code{ct} }{
-    returns a contingency table
+    Returns a contingency table.
   }
-  \item{ \code{ct} }{
-    returns a logical matrix of species occurrences in clusters
+  \item{ \code{oc} }{
+    Returns a logical matrix of species occurrences in clusters.
   }
   \item{ \code{fq} }{
-    obtains species frequencies
+    Returns species frequencies.
   }
   \item{ \code{ll} }{
-    returns layer assignments
+    Returns layer assignments.
   }
   \item{ \code{ll.o} }{
-    returns layer assignments as ordered integer (see
-    \code{\link[vegsoup:layernumber]{layernumber}})
+    Returns layer assignments as ordered integer (see
+    \code{\link[vegsoup:layernumber]{layernumber}}).
   }
   \item{ \code{tt} }{
-    returns scientific species name
+    Returns scientific species names.
   }
   \item{ \code{d} }{
-     returns \verb{TRUE} for diagnostic species
+    Returns \verb{TRUE} for diagnostic species, those with fidelity values
+    and Fisher test above threshold (\verb{stat.min} and \verb{p.max}).
   }
   \item{ \code{ft.t} }{
-    reports if Fisher test is within threshold \verb{p.max}
+    Reports if Fisher test is within threshold \verb{p.max}.
   }
   \item{ \code{ft.s} }{
-    returns Fisher test significance symbols
+    Returns Fisher test significance symbols.
   }
   \item{ \code{ft.n} }{
-    reports the number of clusters with significant Fisher test (see \verb{p.max})
+    Reports the number of clusters with significant Fisher test (see \verb{p.max}).
   }
   \item{ \code{ft.c} }{
-    returns the clusters for which a Fisher test is significant
+    Returns the clusters for which a Fisher test is significant.
   }
   \item{ \code{ff} }{
-    reports if fidelity measure is above treshold \verb{stat.min} and at least
-    one Fisher test is significant (\verb{p.max})
+    Reports if fidelity measure is above threshold \verb{stat.min} and at least
+    one Fisher test is significant (\verb{p.max}).
   }
   \item{ \code{ft.any} }{
-    reports if at least one cluster is significant for a Fisher test
-    and a given species
+    Reports if at least one cluster is significant for a Fisher test
+    and a given species.
   }
   \item{ \code{q0}, \code{q0.25}, \code{q0.5}, \code{q0.75}, \code{q1} }{
-    Get abundance quantiles.
+    Get abundance quantiles (min, lower, median, upper, max).
   }
   \item{ \code{qs} }{
-    If \code{TRUE} abundance quantiles are available in original abundance scale.
+    Reports if cover is back transformed. If \code{TRUE} abundance quantiles
+    are available in original abundance scale, otherwise class midpoints are
+    returned.
   }
  }
 
 }
 
 \value{
-
-The functions are grouped by their returned class and/or mode.
+ The functions are grouped by their returned class and/or mode. Except
+ otherwise mentioned the function return objects equal to \verb{length(x)}.
 
  \describe{
 
@@ -173,7 +180,7 @@ The functions are grouped by their returned class and/or mode.
     \code{ll.o},
     \code{ft.n}
   }{
-    return \verb{numeric} vectors. \code{stat.min} and \code{p.max} return
+    Return \verb{numeric} vectors. \code{stat.min} and \code{p.max} return
     vectors of length 1, the remaining functions vectors of \code{length(x)},
     the number of species and species layer replicates, respectively.
   }
@@ -182,7 +189,7 @@ The functions are grouped by their returned class and/or mode.
     \code{ll},
     \code{tt}
   }{
-    return a \verb{character} vector.
+    Return a \verb{character} vector.
   }
 
   \item{
@@ -190,41 +197,42 @@ The functions are grouped by their returned class and/or mode.
     \code{ff},
     \code{ft.any}
   }{
-    return \verb{logical} vectors.
+    Return \verb{logical} vectors.
   }
 
   \item{
     \code{fm},
     \code{cs},
-    \code{ct}
+    \code{ct},
   }{
-    return a \verb{matrix} of mode \verb{numeric} with as many columns as there
+    Return a \verb{matrix} of mode \verb{numeric} with as many columns as there
     are clusters (\code{nc(x)}).
   }
 
   \item{
     \code{oc}
   }{
-    return a \verb{matrix} of mode \verb{logical} with as many columns as there
+    Return a \verb{matrix} of mode \verb{logical} with as many columns as there
     are clusters (\code{nc(x)}).
   }
 
   \item{
      \code{ft.t}
   }{
-    returns a \verb{matrix} of mode \verb{logical}
+    Returns a \verb{logical} vector sigifing if Fisher test threshold
+    (\verb{p.max}) is achieved.
   }
 
   \item{
     \code{ft.s}
   }{
-    returns a \verb{matrix} of mode \verb{character}
+    Returns a \verb{matrix} of mode \verb{character}
   }
 
   \item{
     \code{ft.c}
   }{
-    returns a \verb{list} of \verb{numeric} vectors
+    Returns a \verb{list} of \verb{numeric} vectors
   }
  }
 }
@@ -267,6 +275,7 @@ ll(x)
 ll.o(x)
 # scientific species name
 tt(x)
+
 # TRUE if diagnostic species
 d(x)
 # Fisher test is within threshold
@@ -277,7 +286,7 @@ ft.s(x)
 ft.n(x)
 # clusters for which Fisher test is significant
 ft.c(x)
-# fidelity measure above treshold and
+# fidelity measure above threshold and
 # at least one significant Fisher test
 ff(x)
 # at least one species is significant for a Fisher test
