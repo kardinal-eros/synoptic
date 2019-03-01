@@ -78,7 +78,7 @@ ct.tex.d <- function (x, align = "+") {
 #	latex utility function to generalize calls for quantiles
 q.tex <- function (x) {
 		r <- matrix(c(q0(x), q0.25(x), q0.5(x), q0.75(x), q1(x)), ncol = 5)
-		r <- round(r, 1)
+		if (mode(r) == "numeric") r <- round(r, 1)
 		return(r)
 }
 #	latex utility function to highlight diagnostic species
