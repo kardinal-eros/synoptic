@@ -119,7 +119,7 @@ ll.o   <- function (x) as.vector(sapply(x, .ll.o))
 #	numeric vector of species fequencies
 tt     <- function (x) as.vector(sapply(x, .tt) )
 
-#	logical vector, TRUE if diagnostic species
+#	logical vector, TRUE if faithful species
 d      <- function (x) as.vector(sapply(x, .d) )
 
 #	fisher test within p.max

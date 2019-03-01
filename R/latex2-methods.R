@@ -81,7 +81,7 @@ q.tex <- function (x) {
 		if (mode(r) == "numeric") r <- round(r, 1)
 		return(r)
 }
-#	latex utility function to highlight diagnostic species
+#	latex utility function to highlight faithful species
 tt.tex <- function (x) {
 	r <- tt(x)
 	i <- d(x) & ft.t(x)

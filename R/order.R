@@ -17,7 +17,7 @@ fm.up <- function (x) {
 		if (any(d(x))) {
 			r <- x[ order(fm.m(x)) ]
 		} else {
-			message("no diagnostic species within treshold")
+			message("no faithful species within treshold")
 			r <- x
 		}
 	}

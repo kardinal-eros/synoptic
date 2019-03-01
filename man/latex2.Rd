@@ -10,7 +10,7 @@ Write table to Latex
 A simple interface to write a file that can be typesetted with latex.
 }
 \usage{
-latex2(obj, file = "foo.tex", diagnostic = TRUE, abundance = 0,
+latex2(obj, file = "foo.tex", faithful = TRUE, abundance = 0,
        taxa.width = 70, layer.width = 2, col.width = 2,
        unit = "mm", paper = "a3paper", warn = FALSE)
 
@@ -23,8 +23,8 @@ template2(paper = "a4paper", color = "lightgray")
   \item{file}{
 \code{character}. A file name with extension.
 }
-  \item{diagnostic}{
-\code{logical}. If \code{TRUE} subset only diagnostic species.
+  \item{faithful}{
+\code{logical}. If \code{TRUE} subset only faithful species.
 }
   \item{abundance}{
 \code{numeric}. Abundance threshold value for species in the table footer.

@@ -82,8 +82,8 @@ caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = N
 			". ",
 			"Total number of relevees: ",
 			sum(nc.n),
-			". Total number and species: ",
-			sum(sp),
+			". Number of species in table: ",
+			sp,
 #			". Number of species per cluster: ",
 #			paste(1:length(nc.n), nc.n, sep = ":", collapse = ", "),
 			"."
@@ -93,7 +93,11 @@ caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = N
 		r <- paste0(c(
 			"Summary table for partition ",
 			k,
-			". ",
+			" with ",
+			nc.n,
+			" plots and ",
+			sp,
+			" species. ", 
 			"Statistics threshold (multiplied by 100): ",
 			stat.min * 100,
 			". ",
@@ -192,6 +196,9 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	#	append a table footer
 	if (missing(y)) {
 		y <- NA
+		sp <- length(unique(tt(x)))
+	} else {
+		sp <- length(unique(tt(x))) + length(unique(tt(y)))
 	}
 	
 	r <- list(
@@ -249,7 +256,7 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	head <- c(head1, "\\tabularnewline", head2)
 	r[[  2 ]] <- begin.longtable(width = c(taxa.width, layer.width, rep(3.2, nc)),
 								columntype = c("p", "c", rep("X", nc)) )
-	r[[  3 ]] <- caption(stat.min = stat.min, what = "synoptic", nc.n = nc.n)
+	r[[  3 ]] <- caption(stat.min = stat.min, what = "synoptic", nc.n = nc.n, sp = sp )
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
@@ -259,7 +266,7 @@ longtable.synoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 	return(unlist(r))
 }
 
-longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n, k, seperate, what, abundance = 0, columns = 2) {
+longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.width = 10, col.width = 10, columntype = "p", unit = "mm", nc, nc.n = NULL, k = NULL, seperate, what, abundance = 0, columns = 2) {
 
 	r <- list(
 		c(
@@ -322,7 +329,7 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 								columntype = c("p", "c", "X", rep("d", 5), "d") )
 	}
 	r[[  2 ]] <- columntypes
-	r[[  3 ]] <- caption(stat.min = stat.min, what = "monoptic", k = k)
+	r[[  3 ]] <- caption(stat.min = stat.min, what = "monoptic", k = k, sp = length(unique(tt(x))), nc.n = nc.n(x))
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot

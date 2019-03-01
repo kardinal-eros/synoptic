@@ -129,8 +129,9 @@ qs(x)
     Returns scientific species names.
   }
   \item{ \code{d} }{
-    Returns \verb{TRUE} for diagnostic species, those with fidelity values
-    and Fisher test above threshold (\verb{stat.min} and \verb{p.max}).
+    Returns \verb{TRUE} for faithful species, those with fidelity values
+    and Fisher test above threshold (\verb{stat.min} and \verb{p.max}) in
+    at least in one cluster.
   }
   \item{ \code{ft.t} }{
     Reports if Fisher test is within threshold \verb{p.max}.
@@ -276,7 +277,7 @@ ll.o(x)
 # scientific species name
 tt(x)
 
-# TRUE if diagnostic species
+# TRUE if faithful species
 d(x)
 # Fisher test is within threshold
 ft.t(x)

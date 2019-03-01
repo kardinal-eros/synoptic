@@ -1,8 +1,8 @@
-latex2 <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+latex2 <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
 	UseMethod("latex2")
 }
 
-latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
 	stopifnot(inherits(obj, "synoptic"))
 	#	not in a combination because ft.c is NA if not within p.max
 	#	is.na(ft.c(rr0)) # use for tex commands
@@ -13,10 +13,10 @@ latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundanc
 	#	abundant species
 	r  <- obj[ fq(obj) > abundance ]
 
-	#	the diagnostic species
+	#	the faithful species
 	rd <- r[ d(r) ]
 
-	#	the remaining non diagnostic species
+	#	the remaining non faithful species
 	rr <- r[ !d(r) ]
 	
 	#	order
@@ -29,7 +29,7 @@ latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundanc
 	rr <- ft.up(rr, warn = warn)
 	rr <- ll.up(rr)
 	
-	if (diagnostic) r <- rd else r <- rr
+	if (faithful) r <- rd else r <- rr
 	
 	class(r) <- "synoptic"
 	
@@ -44,7 +44,7 @@ latex2.synoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundanc
 	close(con)
 }
 
-latex2.monoptic <- function (obj, file =  "foo.tex", diagnostic = TRUE, abundance, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
 	if (!inherits(obj, "list") & !inherits(obj, "monoptic")) {
 		stop("please supply a list of monoptic objects")
 	}

@@ -20,7 +20,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 	nc <- getK(obj)                  # number of clusters
 	nc.n <- partitions(obj)          # number of sites per cluster
 #	nc.s <- richness(obj, "part")    # number of species per cluster
-	n <- ncol(obj)                   # number of species
+	n <- ncol(obj)                   # number of species layer replicates
 	
 	qq <- quantile(obj, coverscale = coverscale)
 	qx <- dimnames(qq)[[ 3 ]]
@@ -58,7 +58,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 			ll.o = ll.o[ x ],        # layer as integer
 			tt   = tt[ x ],          # scientific taxon name
 			
-			d    = FALSE,            # sig. diagnostic species
+			d    = FALSE,            # sig. faithful species
 			ft.n = NA,               # number of clusters with sig. fisher test
 			ft.c = NA,               # index to cluster with sig. fisher test
 			ff   = FALSE,            # fidelity measure above threshold but at least 1 sig. fisher test
@@ -70,7 +70,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 			q0.75 = rep("", nc),     # upper frindge cover
 			q1   = rep("", nc),      # max cover
 			
-			sp   = NA,               # spread
+#			sp   = NA,               # spread
 			
 			nc.n = as.vector(nc.n),  # number of sites per cluster
 			stat.min = stat.min,     # value of stat.min as defined in call
@@ -104,7 +104,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 		r[[ i ]]$q0.75 <- as.vector(qq[ i, , qx = "q0.75" ])
 		r[[ i ]]$q1 <- as.vector(qq[ i, , qx = "q1" ])
 		
-		r[[ i ]]$sp <- as.vector(sp[ i ])		
+#		r[[ i ]]$sp <- as.vector(sp[ i ])		
 				
 		if (length(r[[ i ]]$ft.c ) == 0) r[[ i ]]$ft.c <- NA # which returns NULL if !any(ft.t)
 	}
@@ -124,6 +124,6 @@ summary.synoptic <- function (object, ...) {
 	stopifnot(inherits(object, "synoptic"))
 	cat("object of class  :", class(object),"\n")
 	cat("species          :", nrow(cs(object)),"\n")
-	cat("diag. species    :", sum(d(object)),"\n")
+	cat("faithful species :", sum(d(object)),"\n")
 	cat("median fidelity  :", median(fm(object)),"\n")
 }
