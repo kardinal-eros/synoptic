@@ -23,6 +23,8 @@
 .q1    <- function (x) x$q1
 .qs    <- function (x) x$qs
 
+.pr    <- function (x) x$pr
+
 .stat.min <- function (x) x$stat.min
 .p.max    <- function (x) x$p.max
 .nc.n     <- function (x) x$nc.n
@@ -166,3 +168,16 @@ q1     <- function (x) as.vector(sapply(x, .q1) )
 
 #	coverscale for quantiles
 qs     <- function (x) as.vector(sapply(x, .qs))
+
+#	logical vector, TRUE for private species
+pr <- function (x) {
+		if (inherits(x, "monoptic")) {
+			if (inherits(x, "list")) {
+				stop("please supply a monoptic object, not a list of objects")
+			} else {
+				sapply(x, .pr)
+			}		
+		} else {
+			stop("pr is currently only defined for class monoptic")
+		}
+}

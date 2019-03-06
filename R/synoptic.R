@@ -32,6 +32,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 	q0.75 <- qq[ , , qx = "q0.75"]
 	q1 <- qq[ , , qx = "q1"]
 	
+	pr <- private(obj)               # private
 	sp <- rowSums(ct > 0)            # spread
 
 	#	fisher test significance symbols
@@ -70,7 +71,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 			q0.75 = rep("", nc),     # upper frindge cover
 			q1   = rep("", nc),      # max cover
 			
-#			sp   = NA,               # spread
+			pr   = rep(NA,    nc),   # private species
 			
 			nc.n = as.vector(nc.n),  # number of sites per cluster
 			stat.min = stat.min,     # value of stat.min as defined in call
@@ -104,7 +105,7 @@ synoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 		r[[ i ]]$q0.75 <- as.vector(qq[ i, , qx = "q0.75" ])
 		r[[ i ]]$q1 <- as.vector(qq[ i, , qx = "q1" ])
 		
-#		r[[ i ]]$sp <- as.vector(sp[ i ])		
+		r[[ i ]]$pr <- as.vector(pr[ i, ])		
 				
 		if (length(r[[ i ]]$ft.c ) == 0) r[[ i ]]$ft.c <- NA # which returns NULL if !any(ft.t)
 	}

@@ -29,15 +29,16 @@
 \alias{q0.75}
 \alias{q1}
 \alias{qs}
+\alias{pr}
 
 \title{
  Get components of synoptic objects.
 }
 \description{
  A set of simple functions to obtain components, summary tables or index-like
- vectors and matrices of \verb{synoptic} objects. The function names are held
- as short as possible, reoccurring acronyms include the following: \emph{ft}
- stands for Fisher test and \emph{fm} for fidelity measure.
+ vectors and matrices of \verb{synoptic} and/or \verb{monoptic} objects.
+ The function names are held as short as possible, reoccurring acronyms include
+ the following: \emph{ft} stands for Fisher test and \emph{fm} for fidelity measure.
 }
 \usage{
 nc(x)
@@ -75,6 +76,8 @@ q0.5(x)
 q0.75(x)
 q1(x)
 qs(x)
+
+pr(x)
 }
 
 \arguments{
@@ -168,6 +171,9 @@ qs(x)
     are available in original abundance scale, otherwise class midpoints are
     returned.
   }
+  \item{ \code{pr} }{
+    Reports the private species, those occurring in a particular cluster only.
+  }
  }
 
 }
@@ -204,6 +210,7 @@ qs(x)
     \code{d},
     \code{ff},
     \code{ft.any}
+    \code{pr}
   }{
     Return \verb{logical} vectors.
   }

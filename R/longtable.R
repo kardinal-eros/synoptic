@@ -102,9 +102,10 @@ caption <- function (stat.min = NULL, what = c("synoptic", "monoptic"), nc.n = N
 			stat.min * 100,
 			". ",
 			"Faithful species for this particular partition are depicted in bold face; ",
-			"those species beeing faithful in another partition, not this particular one, are highlighted with an asterisc and in bold-italic.",		
-			"Finally, species that are faithful to any partition but do not achieve a significant",
-			"Fisher test (negatively associated with this particular cluster) are marked with two asteriscs and in italic typeface."
+			"those beeing faithful to another partition, not this particular one, are highlighted with an asterisc and in bold-italic. ",		
+			"Further, species that are faithful to any partition but do not achieve a significant ",
+			"Fisher test (negatively associated with this particular cluster) are marked with two asteriscs and in italic typeface. ",
+			"Finaly, private species to this cluster are labeled with exclamation mark."
 		), collapse = "")
 	}
 		
@@ -154,8 +155,8 @@ footer <- function (x, columns = 2, abundance) {
 	if (inherits(x, "synoptic")) {
 		if (length(x) > 0) {
 			r <- tb.0(x)
-			r[] <- rep(1:ncol(r), each = nrow(r))
-			r[] <- paste(r, ct(x), sep = ":")
+			r[ ] <- rep(1:ncol(r), each = nrow(r))
+			r[ ] <- paste(r, ct(x), sep = ":")
 			r[ ct(x) == 0 ] <- ""
 			r <- apply(r, 1, function (x) paste(x[ x != "" ], collapse = ","))
 			r <- cbind(tt(x), ll(x), ll.o(x), r)
@@ -177,11 +178,16 @@ footer <- function (x, columns = 2, abundance) {
 			}
 	} else {
 		r <- tt(x)
+		i <- pr(x)
+		if (any(i)) r[ i ] <- paste("!", r[ i ])
+
+		r <- r[ order(r) ]
 		r <- paste(r, collapse = ", ")
 	
 		r <- c(paste0("\\begin{multicols}{", columns, "}"),
 			"\\footnotesize{",
-			"Species below abundance threshold ", abundance, ": ",
+			"Species below abundance threshold ", abundance, ". ",
+			"Private species are marked with !. ",
 			r,
 			"}",
 			"\\end{multicols}")

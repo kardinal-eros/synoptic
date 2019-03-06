@@ -14,8 +14,7 @@ monoptic <- function (obj, stat.min = 0.4, p.max = 0.05, coverscale = TRUE) {
 		
 		ri <- sapply(ri, function (y) {
 			sapply(y, function (z) {
-				if (length(z) > 1) {
-					#	ft.c should 
+				if (length(z) > 1) { 
 					z[ i ]
 				} else {
 					z

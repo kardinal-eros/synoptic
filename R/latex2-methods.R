@@ -81,7 +81,7 @@ q.tex <- function (x) {
 		if (mode(r) == "numeric") r <- round(r, 1)
 		return(r)
 }
-#	latex utility function to highlight faithful species
+#	latex utility function to highlight faithful and private species
 tt.tex <- function (x) {
 	r <- tt(x)
 
@@ -91,11 +91,14 @@ tt.tex <- function (x) {
 	i2 <- d(x) & ft.t(x)
 	i2[ i1 ] <- FALSE
 	#	not faithful in this particular partition but in another: italic
-	i3 <- d(x) & !ft.t(x)	
-	
-	r[ i1 ] <- paste0("\\textbf{", r[ i1 ], "}")	
-	r[ i2 ] <- paste0("\\textit{\\textbf{* ", r[ i2 ], "}}")	
+	i3 <- d(x) & !ft.t(x)
+	#	private species
+	i4 <- pr(x)
+		
+	r[ i4 ] <- paste0("! ", r[ i4 ])
 	r[ i3 ] <- paste0("\\textit{** ", r[ i3 ], "}")
+	r[ i2 ] <- paste0("\\textit{\\textbf{* ", r[ i2 ], "}}")	
+	r[ i1 ] <- paste0("\\textbf{", r[ i1 ], "}")
 	
 	return(r)
 }

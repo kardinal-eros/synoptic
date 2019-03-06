@@ -1,4 +1,4 @@
-importFrom("vegsoup", splitAbbr, layers, partitioning, getK, getStat, contingency, constancy, colSums, FisherTest, is.ordinal, layernumber, partitions, quantile)
+importFrom("vegsoup", splitAbbr, layers, partitioning, getK, getStat, contingency, constancy, colSums, FisherTest, is.ordinal, layernumber, partitions, private, quantile)
 importFrom("stats", median)
 importFrom("utils", head)
 
