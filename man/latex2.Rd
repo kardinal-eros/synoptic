@@ -12,9 +12,9 @@ A simple interface to write a file that can be typesetted with latex.
 \usage{
 latex2(obj, file = "foo.tex", faithful = TRUE, abundance = 0,
        taxa.width = 70, layer.width = 2, col.width = 2,
-       unit = "mm", paper = "a3paper", warn = FALSE)
+       unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt")
 
-template2(paper = "a4paper", color = "lightgray")
+template2(paper = "a4paper", color = "lightgray", fontsize = "10pt")
 }
 \arguments{
   \item{obj}{
@@ -47,8 +47,13 @@ See also \code{unit}.
 \code{logical}. Print warnings.
 }
   \item{paper}{
-\code{logical}. Standard LaTex paper size.
+\code{character}. Standard LaTex paper size.
 }
+  \item{fontsize}{
+\code{character}. Standard LaTex font size.
+}
+
+
   \item{color}{
 \code{character}. Color definition for LaTex packages \emph{xcolor}
 and \emph{colortbl}.

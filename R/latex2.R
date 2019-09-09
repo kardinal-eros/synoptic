@@ -1,8 +1,8 @@
-latex2 <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+latex2 <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt") {
 	UseMethod("latex2")
 }
 
-latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt") {
 	stopifnot(inherits(obj, "synoptic"))
 	#	not in a combination because ft.c is NA if not within p.max
 	#	is.na(ft.c(rr0)) # use for tex commands
@@ -33,7 +33,7 @@ latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance 
 	
 	class(r) <- "synoptic" # we loose class somewhere
 	
-	tex <- template2(paper = paper)
+	tex <- template2(paper = paper, fontsize = fontsize)
 	
 	tex[[2]] <- longtable(r, r0, stat.min = stat.min(obj), nc = nc(obj), nc.n = nc.n(obj),
 		col.width = col.width, what = "cluster", abundance = abundance)
@@ -44,7 +44,7 @@ latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance 
 	close(con)
 }
 
-latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE) {
+latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt") {
 	if (!inherits(obj, "list") & !inherits(obj, "monoptic")) {
 		stop("please supply a list of monoptic objects")
 	}
@@ -82,7 +82,7 @@ latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance,
 				"\\newpage")
 	}
 
-	tex <- template2(paper = paper)
+	tex <- template2(paper = paper, fontsize = fontsize)
 	
 	tex[[2]] <- unlist(r)
 	

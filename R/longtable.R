@@ -11,10 +11,10 @@ glyphs <- function (x) {
 }
 
 #	latex template with column types
-template2 <- function (paper = "a4paper", color = "lightgray") {
+template2 <- function (paper = "a4paper", color = "lightgray", fontsize = "10pt") {
 	r <- list(
 		c(
-			"\\documentclass[10pt]{article}",
+			"\\documentclass[", fontsize, "]{article}",
 			paste0("\\usepackage[", paper, "]{geometry}"),
 			"\\usepackage[T1]{fontenc}",
 			"\\usepackage[english]{babel}",
@@ -179,18 +179,40 @@ footer <- function (x, columns = 2, abundance) {
 	} else {
 		r <- tt(x)
 		i <- pr(x)
-		if (any(i)) r[ i ] <- paste("!", r[ i ])
+		
+		if (any(i)) {
+			r1 <- r[  i ]
+			r2 <- r[ !i ]
 
-		r <- r[ order(r) ]
-		r <- paste(r, collapse = ", ")
+			r1 <- r1[ order(r1) ]
+			r2 <- r2[ order(r2) ]
+									
+			r1 <- paste(paste0("\\textbf{", r1, "}"), collapse = ", ")
+
+			r2 <- paste(r2, collapse = ", ")
 	
-		r <- c(paste0("\\begin{multicols}{", columns, "}"),
-			"\\footnotesize{",
-			"Species below abundance threshold ", abundance, ". ",
-			"Private species are marked with !. ",
-			r,
-			"}",
-			"\\end{multicols}")
+			r <- c(paste0("\\begin{multicols}{", columns, "}"),
+				"\\footnotesize{",
+				paste0("Private species below abundance threshold ", abundance, ": "),
+				r1,
+				". \\newline\\indent",
+				"Remaining species within threshold: ",
+				r2,
+				".",
+				"}",
+				"\\end{multicols}")		
+		} else {
+			r <- r[ order(r) ]
+			r <- paste(r, collapse = ", ")
+	
+			r <- c(paste0("\\begin{multicols}{", columns, "}"),
+				"\\footnotesize{",
+				"Species below abundance threshold ", abundance, ". ",
+				"Private species are marked with !. ",
+				r,
+				"}",
+				"\\end{multicols}")			
+			}
 	}	
 	return(r)
 }
