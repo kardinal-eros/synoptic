@@ -36,7 +36,7 @@ latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance 
 	tex <- template2(paper = paper, fontsize = fontsize)
 	
 	tex[[2]] <- longtable(r, r0, stat.min = stat.min(obj), nc = nc(obj), nc.n = nc.n(obj),
-		col.width = col.width, what = "cluster", abundance = abundance)
+		col.width = col.width, what = "cluster", abundance = abundance, taxa.width = taxa.width, layer.width = layer.width)
 		
 	tex <- unlist(tex)
 	con <- file(file)
@@ -74,10 +74,11 @@ latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance,
 		#	order
 		ri <- fm.up(ri)
 		ri <- fq.up(ri)
+		ri <- ll.up(ri)
 
 		r[[ i ]] <- c(
 			paste("% cluster", i),
-				longtable(x = ri, y = ri0, stat.min = stat.min(obj), k = i, abundance = abundance),
+				longtable(x = ri, y = ri0, stat.min = stat.min(obj), k = i, abundance = abundance, taxa.width = taxa.width, layer.width = layer.width),
 				"% pagebreak",
 				"\\newpage")
 	}
