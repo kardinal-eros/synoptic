@@ -1,8 +1,8 @@
 Package: synoptic
 Type: Package
 Title: Synoptic Tables for Vegsoup Objects
-Version: 0.1-4
-Date: 2019-03-06
+Version: 0.1-5
+Date: 2020-08-05
 Authors@R: c(person("Roland", "Kaiser", role = c("aut", "cre"),
 					 email = "kardinal.eros@gmail.com"))
 Maintainer: Roland Kaiser <kardinal.eros@gmail.com>

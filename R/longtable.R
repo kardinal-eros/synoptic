@@ -144,7 +144,7 @@ list2tex.synoptic <- function (x, seperate = TRUE, what = "cluster") {
 #	convert list object to tex commands for objects of class monoptic
 list2tex.monoptic <- function (x, seperate, what) {
 	
-	r <- cbind(tt.tex(x), ll(x), ct.tex.d(x), q.tex(x), round(c(fm(x)), 2) * 100)
+	r <- cbind(tt.tex(x), ll(x), ct.tex.d(x), round(c(fm(x)), 2) * 100, q.tex(x))
 	r <- apply(r, 1, function (x) paste(paste(x, collapse = " & "), "\\tabularnewline"))
 
 	return(r)
@@ -160,7 +160,7 @@ footer <- function (x, columns = 2, abundance) {
 			r[ ct(x) == 0 ] <- ""
 			r <- apply(r, 1, function (x) paste(x[ x != "" ], collapse = ","))
 			r <- cbind(tt(x), ll(x), ll.o(x), r)
-			r <- r[order(r[ ,1 ], r[ ,3 ]), -3 ]
+			r <- r[ order(r[ ,1 ], r[ ,3 ]), -3 ]
 
 			r <- paste(apply(r, 1, paste, collapse = " "), collapse = ", ")
 			r <- gsub("  ", " ", r, fixed = TRUE)
@@ -322,7 +322,7 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 			"\\tabularnewline",
 			"\\midrule",
 			"\\endhead"#,
-#			"\\midrule"
+		#	"\\midrule"
 		),
 		NULL, # table foot (\multicolumn{})
 		c(
@@ -343,10 +343,11 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 		NULL # table footer
 		)
 
-	head <- paste(sapply(c("Taxon", "Layer", "Constancy",
-		"Min", "Lower", "Median", "Upper", "Max",
+	head <- paste(sapply(c("Taxon", "Layer", "Constancy", "Statistic",
+		"Min", "Lower", "Median", "Upper", "Max"#,
 		#"Typical", boldface taxon
-		"Statistic"),
+		#"Statistic"
+		),
 		multicolumn, format = "c"), collapse = "&")
 	foot <- "%"
 	
@@ -359,7 +360,7 @@ longtable.monoptic <- function (x, y, stat.min = NULL, taxa.width = 70, layer.wi
 								columntype = c("p", "c", "X", rep("d", 5), "d") )
 	}
 	r[[  2 ]] <- columntypes
-	r[[  3 ]] <- caption(stat.min = stat.min, what = "monoptic", k = k, sp = length(unique(tt(x))), nc.n = nc.n(x))
+	r[[  3 ]] <- caption(stat.min = stat.min, what = "monoptic", k = k, sp = length(unique(c(tt(x), tt(y)))), nc.n = nc.n(x)) #length(unique(tt(x)))
 	r[[  5 ]] <- head
 	r[[  7 ]] <- head
 	r[[  9 ]] <- foot
