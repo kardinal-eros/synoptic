@@ -44,14 +44,14 @@ latex2.synoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance 
 	close(con)
 }
 
-latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt") {
+latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance = 0, taxa.width = 70, layer.width = 2, col.width = 2, unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt") {
 	if (!inherits(obj, "list") & !inherits(obj, "monoptic")) {
 		stop("please supply a list of monoptic objects")
 	}
 	if (missing(abundance)) {
 		estimate.abundance <- TRUE
 	} else {
-		estimate.abundance <- TRUE
+		estimate.abundance <- FALSE
 	}
 	
 	k <- length(obj)
