@@ -92,3 +92,34 @@ latex2.monoptic <- function (obj, file =  "foo.tex", faithful = TRUE, abundance 
 		writeLines(glyphs(tex), con)
 	close(con)
 }
+
+#	latex standard triplet
+latex2triplet <- function (obj, stat.min = 0.3, paper = c("a4paper", "a4paper", "a4paper"), taxa.width = c(70, 70, 70), fontsize = c("10pt", "10pt", "10pt"), file = c("faithful.tex","remaining.tex","monoptic.tex"), path = tempdir(), suffix = NULL) {
+	stopifnot(inherits(obj, "VegsoupPartitionFidelity"))
+	
+	if (missing(path)) {
+		message("write files to", path)		
+	}
+	
+	#if (length(paper) == 3) {		
+	#}
+	
+	latex2(synoptic(obj, stat.min = stat.min),
+	file = file.path(path, paste0(suffix, "faithful.tex")),
+	taxa.width = taxa.width[ 1 ],
+	fontsize = fontsize[ 1 ],
+	paper = paper[ 1 ])
+
+	latex2(synoptic(obj, stat.min = stat.min),
+	file = file.path(path, paste0(suffix, "remaining.tex")), faithful = FALSE,
+	taxa.width = taxa.width[ 2 ],
+	fontsize = fontsize[ 2 ],
+	paper = paper[ 2 ])
+
+	latex2(monoptic(obj, stat.min = stat.min, coverscale = TRUE),
+	file = file.path(path, paste0(suffix, "monoptic.tex")),
+	faithful = FALSE,
+	taxa.width = taxa.width[ 3 ],
+	fontsize = fontsize[ 3 ],
+	paper = paper[ 3 ])
+}
