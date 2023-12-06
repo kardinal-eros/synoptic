@@ -15,7 +15,7 @@ latex2(obj, file = "foo.tex", faithful = TRUE, abundance = 0,
        taxa.width = 70, layer.width = 2, col.width = 2,
        unit = "mm", paper = "a3paper", warn = FALSE, fontsize = "10pt")
 
-latex2triplet(obj, stat.min = 0.3, paper = c("a4paper", "a4paper", "a4paper"),
+latex2triplet(obj, stat.min = 0.3, p.max = 0.05, paper = c("a4paper", "a4paper", "a4paper"),
        taxa.width = c(70,70,70), fontsize = c("10pt", "10pt", "10pt"),
        file = c("faithful.tex","remaining.tex","monoptic.tex"),
        path = tempdir(), suffix = NULL)
@@ -67,6 +67,9 @@ and \emph{colortbl}.
 }
   \item{stat.min}{
 \code{numeric}. Threshold value of fidelity statistics.
+}
+  \item{p.max}{
+\code{numeric}. Threshold value of fisher test.
 }
   \item{suffix}{
 \code{character}. String to be pasted to file names.
